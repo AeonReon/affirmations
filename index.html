@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Daily Affirmations</title>
+<link rel="icon" type="image/png" href="icon.png">
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0a0e2a">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #0a0e2a;
+    --surface: rgba(255,255,255,0.04);
+    --surface-hover: rgba(255,255,255,0.07);
+    --border: rgba(255,255,255,0.06);
+    --border-hover: rgba(202,169,89,0.25);
+    --gold: #caa959;
+    --gold-light: #e2c97a;
+    --gold-soft: rgba(202,169,89,0.12);
+    --text: #ffffff;
+    --text-dim: rgba(255,255,255,0.45);
+    --text-muted: rgba(255,255,255,0.25);
+    --radius: 20px;
+  }
+
+  html, body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    min-height: 100dvh;
+    color: var(--text);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Ambient mesh gradient background */
+  .bg-mesh {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .bg-mesh::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    right: -150px;
+    background: radial-gradient(circle, rgba(30,40,120,0.5) 0%, transparent 70%);
+    filter: blur(60px);
+  }
+
+  .bg-mesh::after {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    bottom: -100px;
+    left: -200px;
+    background: radial-gradient(circle, rgba(202,169,89,0.08) 0%, transparent 70%);
+    filter: blur(80px);
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 440px;
+    margin: 0 auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 52px 0 36px;
+  }
+
+  .header-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  }
+
+  .header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+
+  .header p {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* Categories */
+  .categories {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 40px;
+  }
+
+  .categories.hidden { display: none; }
+
+  .category-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .category-card:hover, .category-card:active {
+    background: var(--surface-hover);
+    border-color: var(--border-hover);
+  }
+
+  .category-card:active {
+    transform: scale(0.98);
+  }
+
+  .cat-emoji {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--gold-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 19px;
+    flex-shrink: 0;
+  }
+
+  .cat-label {
+    flex: 1;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.1px;
+  }
+
+  .cat-chevron {
+    width: 16px;
+    height: 16px;
+    opacity: 0.2;
+    transition: opacity 0.25s, transform 0.25s;
+  }
+
+  .category-card:hover .cat-chevron {
+    opacity: 0.4;
+    transform: translateX(2px);
+  }
+
+  /* Affirmation View */
+  .affirmation-view {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    padding-bottom: 40px;
+  }
+
+  .affirmation-view.active {
+    display: flex;
+    animation: viewIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes viewIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    padding: 8px 0 4px;
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: var(--gold);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 0;
+    font-family: inherit;
+    transition: opacity 0.2s;
+  }
+
+  .back-btn:hover { opacity: 0.65; }
+
+  .back-btn svg { width: 16px; height: 16px; }
+
+  .view-category-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    text-align: center;
+    color: var(--text);
+    margin: 20px 0 0;
+  }
+
+  .view-category-emoji {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 6px;
+  }
+
+  /* The affirmation display */
+  .affirmation-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 0;
+  }
+
+  .affirmation-glass {
+    width: 100%;
+    padding: 44px 28px;
+    background: linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 28px;
+    text-align: center;
+    position: relative;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .affirmation-glass::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 30px;
+    right: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(202,169,89,0.3), transparent);
+  }
+
+  .aff-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 21px;
+    line-height: 1.65;
+    font-weight: 400;
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .aff-text.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .aff-placeholder {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text-muted);
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  /* Inspire button */
+  .inspire-btn {
+    width: 100%;
+    padding: 17px;
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+    color: var(--bg);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 24px rgba(202,169,89,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .inspire-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.15) 100%);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .inspire-btn:hover::before { opacity: 1; }
+
+  .inspire-btn:hover {
+    box-shadow: 0 8px 32px rgba(202,169,89,0.3);
+    transform: translateY(-1px);
+  }
+
+  .inspire-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 12px rgba(202,169,89,0.2);
+  }
+
+  /* Share */
+  .footer-actions {
+    display: flex;
+    justify-content: center;
+    padding-top: 16px;
+    min-height: 48px;
+  }
+
+  .share-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 13px;
+    font-weight: 400;
+    padding: 8px 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.25s;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .share-btn.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .share-btn:hover {
+    border-color: var(--border-hover);
+    color: var(--gold);
+  }
+
+  /* Responsive */
+  @media (max-width: 380px) {
+    .header { padding-top: 36px; }
+    .header h1 { font-size: 23px; }
+    .aff-text { font-size: 19px; }
+    .affirmation-glass { padding: 36px 22px; }
+  }
+
+  @media (min-height: 800px) {
+    .affirmation-area { padding: 40px 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<div class="app">
+  <div class="header">
+    <img class="header-icon" src="icon.png" alt="Daily Affirmations">
+    <h1>Daily Affirmations</h1>
+    <p>Nourish Your Soul</p>
+  </div>
+
+  <div class="categories" id="cats"></div>
+
+  <div class="affirmation-view" id="affView">
+    <div class="nav-bar">
+      <button class="back-btn" onclick="goBack()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Back
+      </button>
+    </div>
+    <div class="view-category-emoji" id="viewEmoji"></div>
+    <div class="view-category-name" id="viewName"></div>
+    <div class="affirmation-area">
+      <div class="affirmation-glass">
+        <p class="aff-text show" id="affText">
+          <span class="aff-placeholder">Tap below to receive your affirmation</span>
+        </p>
+      </div>
+    </div>
+    <button class="inspire-btn" id="inspBtn" onclick="inspire()">Inspire Me</button>
+    <div class="footer-actions">
+      <button class="share-btn" id="shareBtn" onclick="share()">Share</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const data = {
+  "Abundance": { e: "\u2728", a: [
+    "I open my mind and heart to the unlimited abundance of life.",
+    "Prosperity flows to me in expected and unexpected ways.",
+    "I deserve to live a life that feels rich in joy, peace, and support.",
+    "There is more than enough good for me here and now.",
+    "I welcome abundance with gratitude and trust.",
+    "Every day I become more available to blessings, opportunities, and prosperity.",
+    "I release the fear of lack and rest in the truth of plenty.",
+    "The universe supports me in beautiful and generous ways.",
+    "I allow wealth and wellbeing to grow naturally in my life.",
+    "I am aligned with the energy of overflow and expansion.",
+    "Good things come to me easily when I am open to receive.",
+    "I honor my worth and allow abundance to reflect it.",
+    "I am grateful for what I have, and I am open to even more good.",
+    "My life is a magnet for inspired opportunities and generous outcomes.",
+    "I trust that life is always moving me toward greater abundance."
+  ]},
+  "Health": { e: "\uD83C\uDF3F", a: [
+    "My body is wise, and I listen to it with love and respect.",
+    "Every cell in my body responds to thoughts of health, harmony, and healing.",
+    "I nourish myself with choices that support strength and vitality.",
+    "I give my body the rest, care, and kindness it deserves.",
+    "Healing is unfolding within me in gentle and powerful ways.",
+    "I am grateful for my body and all it does for me each day.",
+    "I choose thoughts that create peace, balance, and wellbeing.",
+    "My mind and body work together in perfect cooperation.",
+    "I release stress and invite calm healing energy into my system.",
+    "Wellness flows through me naturally and continuously.",
+    "I am patient with my body and loving in my healing journey.",
+    "Each breath I take renews and restores me.",
+    "I trust my body\u2019s ability to rebalance and thrive.",
+    "I am worthy of feeling vibrant, energized, and well.",
+    "Today I choose health in thought, word, and action."
+  ]},
+  "Accepting Love": { e: "\uD83D\uDC96", a: [
+    "I am safe to receive love in its purest and healthiest form.",
+    "My heart is open to love, tenderness, and true connection.",
+    "I deserve love that is kind, honest, and nourishing.",
+    "I allow myself to be loved just as I am.",
+    "Love flows to me easily when I relax and receive it.",
+    "I release the belief that I must earn love.",
+    "I am worthy of deep affection, care, and devotion.",
+    "I trust myself to welcome the love that honors my soul.",
+    "My heart is strong enough to open and soft enough to receive.",
+    "I let love in without fear, force, or doubt.",
+    "I am lovable, valuable, and deserving of beautiful connection.",
+    "I welcome relationships that reflect respect, warmth, and truth.",
+    "I choose to receive love with grace and confidence.",
+    "The love meant for me finds me with ease.",
+    "I am open to giving and receiving love freely and fully."
+  ]},
+  "Releasing Shame": { e: "\uD83E\uDD8B", a: [
+    "I release shame and return to the truth of my worth.",
+    "My past is a teacher, not a life sentence.",
+    "I forgive myself and allow compassion to lead the way.",
+    "I am not my mistakes; I am my willingness to heal and grow.",
+    "I let go of harsh judgment and choose gentle understanding.",
+    "There is nothing shame can hold when love is present.",
+    "I release what was never mine to carry.",
+    "I honor my humanity and embrace my healing.",
+    "I am worthy of peace, even as I continue to grow.",
+    "I choose self-acceptance over self-punishment.",
+    "Shame dissolves when I meet myself with honesty and love.",
+    "I am learning, evolving, and becoming freer every day.",
+    "I no longer define myself by painful moments from the past.",
+    "I give myself permission to be imperfect and still deeply worthy.",
+    "I come home to myself with tenderness, truth, and grace."
+  ]},
+  "New Experiences": { e: "\u2604\uFE0F", a: [
+    "I welcome new experiences with curiosity, trust, and openness.",
+    "Life is bringing fresh possibilities to me every day.",
+    "I am ready to step beyond old limits and discover new joy.",
+    "I trust myself to meet the new with courage and grace.",
+    "Wonderful experiences are unfolding for me now.",
+    "I am open to change that expands my life in beautiful ways.",
+    "Each new experience teaches me, strengthens me, and awakens me.",
+    "I say yes to growth, adventure, and inspired possibilities.",
+    "The unknown can be exciting, supportive, and full of gifts.",
+    "I release resistance and allow life to surprise me kindly.",
+    "I am available for new doors to open.",
+    "I welcome fresh energy, fresh ideas, and fresh opportunities.",
+    "Life is meant to be lived, explored, and embraced.",
+    "I trust that new experiences are leading me toward something wonderful.",
+    "I move forward with an open heart and an open mind."
+  ]},
+  "People Upgrade": { e: "\uD83E\uDEC2", a: [
+    "I welcome uplifting, authentic, and aligned people into my life.",
+    "I am available for friendships and connections that feel nourishing.",
+    "The right people are finding me at the right time.",
+    "I attract kind, awake, and inspiring souls with ease.",
+    "I release relationships that drain me and make space for those who elevate me.",
+    "I am worthy of being surrounded by people who see and value me.",
+    "Healthy, mutual, and joyful connections are flowing into my life.",
+    "I trust life to introduce me to people who match my growth.",
+    "I allow my circle to evolve as I evolve.",
+    "I choose relationships that feel peaceful, energizing, and true.",
+    "Supportive and beautiful people belong in my life.",
+    "I am open to meeting people who expand my world for the better.",
+    "My life is becoming more aligned, and so are my relationships.",
+    "I welcome community, connection, and soul-aligned companionship.",
+    "I easily recognize and receive the people who are good for me."
+  ]},
+  "Harmonious Family": { e: "\uD83C\uDFE1", a: [
+    "Harmony, understanding, and healing flow through my family relationships.",
+    "I choose peace where there was once tension.",
+    "Love has the power to soften and restore my family connections.",
+    "I bring calm, compassion, and patience into my home.",
+    "I release old patterns and welcome a new way of relating.",
+    "My family can grow in love, respect, and understanding.",
+    "I choose to see the highest good in those I love.",
+    "Peace begins within me and blesses my family.",
+    "I welcome healthy communication and mutual care.",
+    "Healing energy surrounds my family and guides us gently.",
+    "I allow more grace, warmth, and connection into our relationships.",
+    "My home is becoming a place of harmony and safety.",
+    "I release resentment and make room for peace.",
+    "Love, truth, and kindness are guiding my family now.",
+    "I trust that harmony can grow one loving moment at a time."
+  ]},
+  "Being Generous": { e: "\uD83E\uDE77", a: [
+    "I give from a full and grateful heart.",
+    "Generosity expands my life and blesses others.",
+    "There is joy in sharing my time, love, and resources.",
+    "I trust that what I give with love returns in beautiful ways.",
+    "I am generous with kindness, patience, and encouragement.",
+    "Giving and receiving are both natural parts of a healthy life.",
+    "My generosity creates ripples of goodness in the world.",
+    "I love being a source of support, warmth, and blessing.",
+    "I share freely without fear of losing.",
+    "There is always enough within me to offer something meaningful.",
+    "I choose an open heart over a guarded one.",
+    "Generosity keeps me connected to abundance and love.",
+    "I bless others with what I have and who I am.",
+    "I give with joy, wisdom, and balance.",
+    "The more love I share, the more alive I feel."
+  ]},
+  "Being in the Flow": { e: "\uD83C\uDF0A", a: [
+    "I relax and trust the natural flow of life.",
+    "I do not need to force what is already finding its way to me.",
+    "Life supports me when I move with trust and presence.",
+    "I release struggle and allow ease to guide me.",
+    "I am in harmony with the rhythm of my own life.",
+    "What is meant for me unfolds in the right way and the right time.",
+    "I let go of resistance and welcome divine timing.",
+    "I trust the unfolding, even when I cannot yet see the whole picture.",
+    "Ease, clarity, and momentum flow through me now.",
+    "I move forward with calm confidence and inner alignment.",
+    "I allow life to work with me, not against me.",
+    "The path becomes clear as I stay open and present.",
+    "I am guided, supported, and carried by something greater.",
+    "I choose peace over pressure and trust over control.",
+    "I am learning to flow with life instead of fighting it."
+  ]},
+  "Letting Go": { e: "\uD83C\uDF43", a: [
+    "I lovingly release what no longer supports my highest good.",
+    "It is safe for me to let go and move forward.",
+    "I free myself from old patterns, old pain, and old stories.",
+    "I no longer need to carry what has already taught me enough.",
+    "Letting go creates space for peace, clarity, and new blessings.",
+    "I release with gratitude and welcome what is next.",
+    "The past is complete, and I am free to begin again.",
+    "I surrender what feels heavy and choose what feels true.",
+    "I let go of attachments that keep me small or stuck.",
+    "Releasing is an act of self-respect and self-love.",
+    "I am ready to clear space for something better.",
+    "I trust that what leaves is making room for what belongs.",
+    "I release with grace, not fear.",
+    "I choose freedom over familiarity.",
+    "Every breath out helps me let go and lighten my heart."
+  ]}
+};
+
+let cur = null, last = -1;
+
+function init() {
+  const c = document.getElementById('cats');
+  for (const [name, d] of Object.entries(data)) {
+    const el = document.createElement('div');
+    el.className = 'category-card';
+    el.onclick = () => open(name);
+    el.innerHTML = `
+      <div class="cat-emoji">${d.e}</div>
+      <div class="cat-label">${name}</div>
+      <svg class="cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+    `;
+    c.appendChild(el);
+  }
+}
+
+function open(name) {
+  cur = name; last = -1;
+  document.getElementById('cats').classList.add('hidden');
+  const v = document.getElementById('affView');
+  v.classList.remove('active');
+  void v.offsetWidth;
+  v.classList.add('active');
+  document.getElementById('viewEmoji').textContent = data[name].e;
+  document.getElementById('viewName').textContent = name;
+  document.getElementById('affText').innerHTML = '<span class="aff-placeholder">Tap below to receive your affirmation</span>';
+  document.getElementById('affText').classList.add('show');
+  document.getElementById('shareBtn').classList.remove('show');
+  document.getElementById('inspBtn').textContent = 'Inspire Me';
+  window.scrollTo(0, 0);
+}
+
+function goBack() {
+  document.getElementById('affView').classList.remove('active');
+  document.getElementById('cats').classList.remove('hidden');
+  cur = null;
+}
+
+function inspire() {
+  if (!cur) return;
+  const items = data[cur].a;
+  let i;
+  do { i = Math.floor(Math.random() * items.length); } while (i === last && items.length > 1);
+  last = i;
+
+  const el = document.getElementById('affText');
+  el.classList.remove('show');
+
+  setTimeout(() => {
+    el.textContent = items[i];
+    el.classList.add('show');
+    document.getElementById('shareBtn').classList.add('show');
+    document.getElementById('inspBtn').textContent = 'Inspire Me Again';
+  }, 250);
+}
+
+function share() {
+  const t = document.getElementById('affText').textContent;
+  if (navigator.share) {
+    navigator.share({ text: t });
+  } else {
+    navigator.clipboard.writeText(t).then(() => {
+      const b = document.getElementById('shareBtn');
+      b.textContent = 'Copied!';
+      setTimeout(() => b.textContent = 'Share', 1500);
+    });
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>
