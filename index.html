@@ -2,661 +2,2022 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Daily Affirmations</title>
-<link rel="icon" type="image/png" href="icon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>Lumina — Daily Affirmations</title>
+<meta name="description" content="A luminous daily affirmation practice. Wisdom for self, love, abundance, change, healing and flow.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0a0e2a">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0a1135">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap');
+  *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-  :root {
-    --bg: #0a0e2a;
-    --surface: rgba(255,255,255,0.04);
-    --surface-hover: rgba(255,255,255,0.07);
-    --border: rgba(255,255,255,0.06);
-    --border-hover: rgba(202,169,89,0.25);
-    --gold: #caa959;
-    --gold-light: #e2c97a;
-    --gold-soft: rgba(202,169,89,0.12);
-    --text: #ffffff;
-    --text-dim: rgba(255,255,255,0.45);
-    --text-muted: rgba(255,255,255,0.25);
-    --radius: 20px;
+  :root{
+    --ink:#0a1135;
+    --ink-2:#141a45;
+    --ink-3:#1c2358;
+    --gold:#e8c275;
+    --gold-deep:#c9a45a;
+    --gold-light:#f5d997;
+    --gold-glow:rgba(232,194,117,0.18);
+    --rose:#f4a8b8;
+    --violet:#8d7cf0;
+    --azure:#7fb0ff;
+    --paper:#fbf5e8;
+    --paper-soft:rgba(251,245,232,0.92);
+    --text:#fbf5e8;
+    --text-soft:rgba(251,245,232,0.72);
+    --text-mute:rgba(251,245,232,0.45);
+    --line:rgba(232,194,117,0.18);
+    --line-soft:rgba(251,245,232,0.08);
+    --card:rgba(255,255,255,0.04);
+    --card-2:rgba(255,255,255,0.06);
+    --radius:22px;
+    --radius-lg:28px;
+    --shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+    --safe-top:env(safe-area-inset-top, 0px);
+    --safe-bottom:env(safe-area-inset-bottom, 0px);
   }
 
-  html, body {
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg);
-    min-height: 100vh;
-    min-height: 100dvh;
-    color: var(--text);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
+  html,body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    color:var(--text);
+    background:var(--ink);
+    min-height:100vh;
+    min-height:100dvh;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
   }
 
-  /* Ambient mesh gradient background */
-  .bg-mesh {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
+  body{
+    background:
+      radial-gradient(1200px 800px at 80% -10%, rgba(141,124,240,0.18), transparent 60%),
+      radial-gradient(900px 700px at -10% 20%, rgba(244,168,184,0.10), transparent 60%),
+      radial-gradient(1100px 800px at 50% 110%, rgba(232,194,117,0.14), transparent 60%),
+      linear-gradient(180deg, #0a1135 0%, #0d1645 40%, #0a1135 100%);
+    background-attachment:fixed;
   }
 
-  .bg-mesh::before {
-    content: '';
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    top: -200px;
-    right: -150px;
-    background: radial-gradient(circle, rgba(30,40,120,0.5) 0%, transparent 70%);
-    filter: blur(60px);
+  /* Aurora orbs floating in background */
+  .aurora{
+    position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+  }
+  .orb{
+    position:absolute; border-radius:50%; filter:blur(80px); opacity:0.55;
+    animation: drift 22s ease-in-out infinite;
+  }
+  .orb.gold  { width:420px; height:420px; background:radial-gradient(circle,#e8c275,transparent 70%); top:-80px; right:-100px; }
+  .orb.rose  { width:380px; height:380px; background:radial-gradient(circle,#f4a8b8,transparent 70%); bottom:10%; left:-120px; animation-delay:-8s; }
+  .orb.violet{ width:520px; height:520px; background:radial-gradient(circle,#8d7cf0,transparent 70%); top:35%; right:-200px; animation-delay:-14s; opacity:0.4; }
+  .orb.azure { width:340px; height:340px; background:radial-gradient(circle,#7fb0ff,transparent 70%); top:60%; left:30%; animation-delay:-4s; opacity:0.3; }
+  @keyframes drift{
+    0%,100%{ transform:translate(0,0) scale(1); }
+    33%   { transform:translate(40px,-30px) scale(1.07); }
+    66%   { transform:translate(-30px,30px) scale(0.96); }
   }
 
-  .bg-mesh::after {
-    content: '';
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    bottom: -100px;
-    left: -200px;
-    background: radial-gradient(circle, rgba(202,169,89,0.08) 0%, transparent 70%);
-    filter: blur(80px);
+  /* Subtle starfield */
+  .stars{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 80% 70%, rgba(255,255,255,0.45), transparent),
+      radial-gradient(1px 1px at 60% 20%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.4), transparent),
+      radial-gradient(1px 1px at 90% 40%, rgba(255,255,255,0.35), transparent),
+      radial-gradient(1px 1px at 10% 60%, rgba(255,255,255,0.5), transparent);
+    background-size: 600px 600px;
+    animation: twinkle 8s ease-in-out infinite alternate;
+    opacity:0.55;
+  }
+  @keyframes twinkle{ from{opacity:0.35;} to{opacity:0.7;} }
+
+  .app{
+    position:relative; z-index:1;
+    max-width:480px;
+    margin:0 auto;
+    padding:0 22px calc(40px + var(--safe-bottom));
+    min-height:100vh;
+    min-height:100dvh;
   }
 
-  .app {
-    position: relative;
-    z-index: 1;
-    max-width: 440px;
-    margin: 0 auto;
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    padding: 0 20px;
+  /* ---------- HEADER / BRAND ---------- */
+  .brand{
+    text-align:center;
+    padding: calc(48px + var(--safe-top)) 0 24px;
+  }
+  .logo{
+    width:74px; height:74px; margin:0 auto 16px;
+    display:block;
+    filter: drop-shadow(0 8px 30px rgba(232,194,117,0.4));
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{ transform:translateY(0); }
+    50%   { transform:translateY(-6px); }
+  }
+  .brand h1{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:34px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    background: linear-gradient(180deg, #f5d997 0%, #e8c275 60%, #c9a45a 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:8px;
+  }
+  .brand .tag{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:15px;
+    color:var(--text-soft);
+    letter-spacing:0.06em;
+  }
+  .brand .divider{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    margin-top:14px; opacity:0.7;
+  }
+  .brand .divider::before, .brand .divider::after{
+    content:''; height:1px; width:36px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .brand .divider svg{ width:10px; height:10px; }
+
+  /* ---------- DAILY CARD ---------- */
+  .daily{
+    position:relative;
+    margin: 8px 0 36px;
+    padding: 30px 26px 28px;
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(150deg, rgba(232,194,117,0.10), rgba(141,124,240,0.06) 60%, rgba(244,168,184,0.06));
+    border:1px solid var(--line);
+    overflow:hidden;
+    isolation:isolate;
+  }
+  .daily::before{
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(400px 300px at 100% -10%, rgba(232,194,117,0.18), transparent 60%),
+      radial-gradient(400px 300px at -10% 110%, rgba(141,124,240,0.18), transparent 60%);
+    z-index:-1;
+  }
+  .daily::after{
+    content:''; position:absolute; top:0; left:24px; right:24px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .daily .label{
+    display:flex; align-items:center; gap:8px;
+    font-size:11px; letter-spacing:0.24em; text-transform:uppercase;
+    color:var(--gold); font-weight:500;
+    margin-bottom:18px;
+  }
+  .daily .label::before{
+    content:''; width:6px; height:6px; border-radius:50%;
+    background:var(--gold); box-shadow:0 0 12px var(--gold);
+  }
+  .daily .quote{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:500;
+    font-size:23px;
+    line-height:1.45;
+    color:var(--paper);
+    letter-spacing:0.005em;
+  }
+  .daily .meta{
+    margin-top:18px; display:flex; justify-content:space-between; align-items:center;
+    font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-mute);
+  }
+  .daily .meta button{
+    background:none; border:1px solid var(--line); color:var(--gold-light);
+    padding:8px 14px; border-radius:999px;
+    font-size:11px; letter-spacing:0.18em; text-transform:uppercase; cursor:pointer;
+    font-family:inherit;
+    transition:all .25s ease;
+  }
+  .daily .meta button:hover{ background:var(--gold-glow); border-color:var(--gold); }
+
+  /* ---------- THEMES ---------- */
+  .theme{ margin-bottom:34px; }
+  .theme-head{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom:14px; padding: 0 4px;
+  }
+  .theme-head h2{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:18px;
+    letter-spacing:0.04em;
+    color:var(--paper);
+  }
+  .theme-head .count{
+    font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--text-mute);
+  }
+  .theme-line{
+    height:1px;
+    background:linear-gradient(90deg, var(--gold) 0%, transparent 50%);
+    margin-bottom:16px;
+    opacity:0.45;
   }
 
-  /* Header */
-  .header {
-    text-align: center;
-    padding: 52px 0 36px;
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:12px;
   }
 
-  .header-icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-    margin-bottom: 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  .cat{
+    position:relative;
+    padding:18px 16px 16px;
+    border-radius:var(--radius);
+    background:var(--card);
+    border:1px solid var(--line-soft);
+    cursor:pointer;
+    text-align:left;
+    color:inherit;
+    font-family:inherit;
+    overflow:hidden;
+    transition:all .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .cat::before{
+    content:''; position:absolute; top:0; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold-deep), transparent);
+    opacity:0;
+    transition:opacity .35s ease;
+  }
+  .cat::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(280px 180px at 50% 120%, var(--gold-glow), transparent 60%);
+    opacity:0;
+    transition:opacity .4s ease;
+  }
+  .cat:hover, .cat:active{
+    background:var(--card-2);
+    border-color:var(--line);
+    transform:translateY(-2px);
+  }
+  .cat:hover::before, .cat:active::before{ opacity:1; }
+  .cat:hover::after, .cat:active::after{ opacity:1; }
+
+  .cat .ico{
+    width:34px; height:34px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:12px;
+    background:linear-gradient(135deg, rgba(232,194,117,0.18), rgba(141,124,240,0.10));
+    margin-bottom:14px;
+    color:var(--gold-light);
+  }
+  .cat .ico svg{ width:18px; height:18px; }
+  .cat .name{
+    font-family:'Fraunces',serif;
+    font-size:15px;
+    font-weight:500;
+    color:var(--paper);
+    line-height:1.25;
+    margin-bottom:4px;
+  }
+  .cat .num{
+    font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-mute);
   }
 
-  .header h1 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 26px;
-    font-weight: 400;
-    color: var(--text);
-    letter-spacing: -0.3px;
-    margin-bottom: 6px;
+  /* ---------- CATEGORY VIEW ---------- */
+  .view{
+    position:fixed; inset:0; z-index:50;
+    background:
+      radial-gradient(900px 600px at 80% -10%, rgba(141,124,240,0.18), transparent 60%),
+      radial-gradient(800px 600px at -10% 100%, rgba(232,194,117,0.16), transparent 60%),
+      linear-gradient(180deg, #0a1135 0%, #0c1340 50%, #0a1135 100%);
+    transform:translateX(100%);
+    transition:transform .45s cubic-bezier(.2,.8,.2,1);
+    display:flex; flex-direction:column;
+    overflow:hidden;
+  }
+  .view.open{ transform:translateX(0); }
+
+  .view-head{
+    flex-shrink:0;
+    padding: calc(16px + var(--safe-top)) 22px 14px;
+    display:flex; align-items:center; gap:14px;
+    border-bottom:1px solid var(--line-soft);
+    backdrop-filter: blur(12px);
+    background:rgba(10,17,53,0.6);
+  }
+  .icon-btn{
+    width:40px; height:40px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--line-soft);
+    border-radius:50%;
+    color:var(--gold-light);
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .icon-btn:hover{ background:var(--gold-glow); border-color:var(--gold); }
+  .icon-btn svg{ width:16px; height:16px; }
+  .view-title{
+    flex:1; text-align:center;
+    font-family:'Fraunces',serif;
+    font-size:17px;
+    color:var(--paper);
+    letter-spacing:0.03em;
+  }
+  .view-title .sub{
+    display:block;
+    font-family:'Inter',sans-serif;
+    font-size:10px; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--text-mute); margin-top:3px;
   }
 
-  .header p {
-    font-size: 13px;
-    color: var(--text-muted);
-    font-weight: 400;
-    letter-spacing: 3px;
-    text-transform: uppercase;
+  .scroll{
+    flex:1;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding: 28px 22px calc(40px + var(--safe-bottom));
+    -webkit-overflow-scrolling:touch;
+    scroll-behavior:smooth;
+  }
+  .scroll::-webkit-scrollbar{ width:0; }
+
+  .aff{
+    position:relative;
+    margin-bottom:14px;
+    padding: 26px 24px 24px;
+    border-radius:var(--radius);
+    background:rgba(255,255,255,0.035);
+    border:1px solid var(--line-soft);
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(14px);
+    animation: rise .6s cubic-bezier(.2,.8,.2,1) forwards;
+  }
+  @keyframes rise{ to { opacity:1; transform:translateY(0); } }
+  .aff::before{
+    content:''; position:absolute; top:0; left:24px; right:24px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity:0.7;
+  }
+  .aff .num{
+    position:absolute; top:14px; right:18px;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:12px;
+    color:var(--text-mute);
+    letter-spacing:0.06em;
+  }
+  .aff .text{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:500;
+    font-size:21px;
+    line-height:1.5;
+    color:var(--paper);
+    letter-spacing:0.005em;
+  }
+  .aff .actions{
+    margin-top:16px;
+    display:flex; gap:10px; align-items:center;
+    opacity:0.7;
+  }
+  .aff .heart{
+    background:none; border:none; cursor:pointer; color:var(--text-mute);
+    padding:4px;
+    display:flex; align-items:center;
+    transition:all .2s ease;
+  }
+  .aff .heart svg{ width:18px; height:18px; }
+  .aff .heart.on{ color:var(--rose); }
+  .aff .heart.on svg{ fill:var(--rose); }
+  .aff .heart:hover{ color:var(--rose); transform:scale(1.1); }
+
+  .end-mark{
+    text-align:center;
+    margin: 28px 0 12px;
+    color:var(--text-mute);
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:14px;
+    letter-spacing:0.1em;
+  }
+  .end-mark::before, .end-mark::after{
+    content:'•'; margin: 0 12px; color:var(--gold-deep);
   }
 
-  /* Categories */
-  .categories {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-bottom: 40px;
+  /* ---------- FAVORITES TAB ---------- */
+  .quick-bar{
+    display:flex; gap:8px; margin-bottom:24px; justify-content:center;
+  }
+  .quick-bar button{
+    background:var(--card);
+    border:1px solid var(--line-soft);
+    color:var(--text-soft);
+    padding:10px 18px;
+    border-radius:999px;
+    font-family:inherit;
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .quick-bar button.active{
+    background:linear-gradient(135deg, rgba(232,194,117,0.22), rgba(141,124,240,0.10));
+    border-color:var(--gold);
+    color:var(--gold-light);
   }
 
-  .categories.hidden { display: none; }
-
-  .category-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  .empty{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--text-mute);
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:18px;
   }
 
-  .category-card:hover, .category-card:active {
-    background: var(--surface-hover);
-    border-color: var(--border-hover);
+  /* ---------- FOOTER ---------- */
+  .foot{
+    text-align:center;
+    margin-top:40px;
+    padding: 24px 0;
+    color:var(--text-mute);
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:13px;
+    letter-spacing:0.06em;
+    border-top:1px solid var(--line-soft);
   }
 
-  .category-card:active {
-    transform: scale(0.98);
-  }
-
-  .cat-emoji {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-    background: var(--gold-soft);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 19px;
-    flex-shrink: 0;
-  }
-
-  .cat-label {
-    flex: 1;
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text);
-    letter-spacing: 0.1px;
-  }
-
-  .cat-chevron {
-    width: 16px;
-    height: 16px;
-    opacity: 0.2;
-    transition: opacity 0.25s, transform 0.25s;
-  }
-
-  .category-card:hover .cat-chevron {
-    opacity: 0.4;
-    transform: translateX(2px);
-  }
-
-  /* Affirmation View */
-  .affirmation-view {
-    display: none;
-    flex: 1;
-    flex-direction: column;
-    padding-bottom: 40px;
-  }
-
-  .affirmation-view.active {
-    display: flex;
-    animation: viewIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  @keyframes viewIn {
-    from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  .nav-bar {
-    display: flex;
-    align-items: center;
-    padding: 8px 0 4px;
-  }
-
-  .back-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: none;
-    border: none;
-    color: var(--gold);
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    padding: 8px 0;
-    font-family: inherit;
-    transition: opacity 0.2s;
-  }
-
-  .back-btn:hover { opacity: 0.65; }
-
-  .back-btn svg { width: 16px; height: 16px; }
-
-  .view-category-name {
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    font-weight: 400;
-    text-align: center;
-    color: var(--text);
-    margin: 20px 0 0;
-  }
-
-  .view-category-emoji {
-    text-align: center;
-    font-size: 32px;
-    margin-bottom: 6px;
-  }
-
-  /* The affirmation display */
-  .affirmation-area {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px 0;
-  }
-
-  .affirmation-glass {
-    width: 100%;
-    padding: 44px 28px;
-    background: linear-gradient(160deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 28px;
-    text-align: center;
-    position: relative;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-  }
-
-  .affirmation-glass::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 30px;
-    right: 30px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(202,169,89,0.3), transparent);
-  }
-
-  .aff-text {
-    font-family: 'DM Serif Display', serif;
-    font-size: 21px;
-    line-height: 1.65;
-    font-weight: 400;
-    color: var(--text);
-    opacity: 0;
-    transform: translateY(8px) scale(0.98);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .aff-text.show {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  .aff-placeholder {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    color: var(--text-muted);
-    font-weight: 300;
-    font-style: italic;
-  }
-
-  /* Inspire button */
-  .inspire-btn {
-    width: 100%;
-    padding: 17px;
-    border: none;
-    border-radius: 16px;
-    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-    color: var(--bg);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 24px rgba(202,169,89,0.2);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .inspire-btn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.15) 100%);
-    opacity: 0;
-    transition: opacity 0.25s;
-  }
-
-  .inspire-btn:hover::before { opacity: 1; }
-
-  .inspire-btn:hover {
-    box-shadow: 0 8px 32px rgba(202,169,89,0.3);
-    transform: translateY(-1px);
-  }
-
-  .inspire-btn:active {
-    transform: translateY(0) scale(0.98);
-    box-shadow: 0 2px 12px rgba(202,169,89,0.2);
-  }
-
-  /* Share */
-  .footer-actions {
-    display: flex;
-    justify-content: center;
-    padding-top: 16px;
-    min-height: 48px;
-  }
-
-  .share-btn {
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    font-size: 13px;
-    font-weight: 400;
-    padding: 8px 20px;
-    border-radius: 100px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.25s;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .share-btn.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .share-btn:hover {
-    border-color: var(--border-hover);
-    color: var(--gold);
-  }
-
-  /* Responsive */
-  @media (max-width: 380px) {
-    .header { padding-top: 36px; }
-    .header h1 { font-size: 23px; }
-    .aff-text { font-size: 19px; }
-    .affirmation-glass { padding: 36px 22px; }
-  }
-
-  @media (min-height: 800px) {
-    .affirmation-area { padding: 40px 0; }
+  /* responsive */
+  @media (min-width: 520px){
+    .grid{ grid-template-columns:repeat(3, 1fr); }
   }
 </style>
 </head>
 <body>
-
-<div class="bg-mesh"></div>
+<div class="aurora">
+  <div class="orb gold"></div>
+  <div class="orb rose"></div>
+  <div class="orb violet"></div>
+  <div class="orb azure"></div>
+</div>
+<div class="stars"></div>
 
 <div class="app">
-  <div class="header">
-    <img class="header-icon" src="icon.png" alt="Daily Affirmations">
-    <h1>Daily Affirmations</h1>
-    <p>Nourish Your Soul</p>
+
+  <header class="brand">
+    <!-- Logo: sun + lotus + crescent emblem -->
+    <svg class="logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Lumina logo">
+      <defs>
+        <linearGradient id="lg-gold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f5d997"/>
+          <stop offset="50%" stop-color="#e8c275"/>
+          <stop offset="100%" stop-color="#c9a45a"/>
+        </linearGradient>
+        <linearGradient id="lg-blue" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7fb0ff"/>
+          <stop offset="100%" stop-color="#4a5eff" stop-opacity="0.6"/>
+        </linearGradient>
+        <radialGradient id="rg-glow" cx="0.5" cy="0.5" r="0.5">
+          <stop offset="0%" stop-color="#f5d997" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#f5d997" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- ambient glow -->
+      <circle cx="50" cy="50" r="48" fill="url(#rg-glow)"/>
+      <!-- outer ring of rays -->
+      <g stroke="url(#lg-gold)" stroke-width="1.4" stroke-linecap="round" opacity="0.85">
+        <line x1="50" y1="6"  x2="50" y2="14"/>
+        <line x1="50" y1="86" x2="50" y2="94"/>
+        <line x1="6"  y1="50" x2="14" y2="50"/>
+        <line x1="86" y1="50" x2="94" y2="50"/>
+        <line x1="18" y1="18" x2="24" y2="24"/>
+        <line x1="76" y1="76" x2="82" y2="82"/>
+        <line x1="82" y1="18" x2="76" y2="24"/>
+        <line x1="24" y1="76" x2="18" y2="82"/>
+      </g>
+      <!-- crescent -->
+      <path d="M50 22 a26 26 0 1 0 18 44 a20 20 0 1 1 -18 -44 z" fill="url(#lg-gold)" opacity="0.95"/>
+      <!-- inner sun -->
+      <circle cx="50" cy="50" r="12" fill="url(#lg-blue)" opacity="0.7"/>
+      <circle cx="50" cy="50" r="6" fill="#f5d997"/>
+    </svg>
+    <h1>Lumina</h1>
+    <p class="tag">a daily practice in becoming</p>
+    <div class="divider">
+      <svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="2" fill="#e8c275"/></svg>
+    </div>
+  </header>
+
+  <!-- Daily affirmation -->
+  <section class="daily" id="daily-card">
+    <div class="label">Today's Light</div>
+    <p class="quote" id="daily-quote">Loading…</p>
+    <div class="meta">
+      <span id="daily-cat">—</span>
+      <button id="new-daily">New light</button>
+    </div>
+  </section>
+
+  <div class="quick-bar">
+    <button class="active" data-tab="all">Categories</button>
+    <button data-tab="fav">Favourites</button>
   </div>
 
-  <div class="categories" id="cats"></div>
+  <main id="home"></main>
 
-  <div class="affirmation-view" id="affView">
-    <div class="nav-bar">
-      <button class="back-btn" onclick="goBack()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Back
-      </button>
-    </div>
-    <div class="view-category-emoji" id="viewEmoji"></div>
-    <div class="view-category-name" id="viewName"></div>
-    <div class="affirmation-area">
-      <div class="affirmation-glass">
-        <p class="aff-text show" id="affText">
-          <span class="aff-placeholder">Tap below to receive your affirmation</span>
-        </p>
-      </div>
-    </div>
-    <button class="inspire-btn" id="inspBtn" onclick="inspire()">Inspire Me</button>
-    <div class="footer-actions">
-      <button class="share-btn" id="shareBtn" onclick="share()">Share</button>
-    </div>
-  </div>
+  <footer class="foot">
+    Breathe. Receive. Become.
+  </footer>
 </div>
 
+<!-- Category view -->
+<section class="view" id="view" aria-hidden="true">
+  <header class="view-head">
+    <button class="icon-btn" id="back" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="view-title" id="view-title">
+      Category
+      <span class="sub" id="view-sub">— affirmations</span>
+    </div>
+    <button class="icon-btn" id="shuffle" aria-label="Shuffle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+    </button>
+  </header>
+  <div class="scroll" id="scroll"></div>
+</section>
+
 <script>
-const data = {
-  "Abundance": { e: "\u2728", a: [
-    "I open my mind and heart to the unlimited abundance of life.",
-    "Prosperity flows to me in expected and unexpected ways.",
-    "I deserve to live a life that feels rich in joy, peace, and support.",
-    "There is more than enough good for me here and now.",
-    "I welcome abundance with gratitude and trust.",
-    "Every day I become more available to blessings, opportunities, and prosperity.",
-    "I release the fear of lack and rest in the truth of plenty.",
-    "The universe supports me in beautiful and generous ways.",
-    "I allow wealth and wellbeing to grow naturally in my life.",
-    "I am aligned with the energy of overflow and expansion.",
-    "Good things come to me easily when I am open to receive.",
-    "I honor my worth and allow abundance to reflect it.",
-    "I am grateful for what I have, and I am open to even more good.",
-    "My life is a magnet for inspired opportunities and generous outcomes.",
-    "I trust that life is always moving me toward greater abundance."
-  ]},
-  "Health": { e: "\uD83C\uDF3F", a: [
-    "My body is wise, and I listen to it with love and respect.",
-    "Every cell in my body responds to thoughts of health, harmony, and healing.",
-    "I nourish myself with choices that support strength and vitality.",
-    "I give my body the rest, care, and kindness it deserves.",
-    "Healing is unfolding within me in gentle and powerful ways.",
-    "I am grateful for my body and all it does for me each day.",
-    "I choose thoughts that create peace, balance, and wellbeing.",
-    "My mind and body work together in perfect cooperation.",
-    "I release stress and invite calm healing energy into my system.",
-    "Wellness flows through me naturally and continuously.",
-    "I am patient with my body and loving in my healing journey.",
-    "Each breath I take renews and restores me.",
-    "I trust my body\u2019s ability to rebalance and thrive.",
-    "I am worthy of feeling vibrant, energized, and well.",
-    "Today I choose health in thought, word, and action."
-  ]},
-  "Accepting Love": { e: "\uD83D\uDC96", a: [
-    "I am safe to receive love in its purest and healthiest form.",
-    "My heart is open to love, tenderness, and true connection.",
-    "I deserve love that is kind, honest, and nourishing.",
-    "I allow myself to be loved just as I am.",
-    "Love flows to me easily when I relax and receive it.",
-    "I release the belief that I must earn love.",
-    "I am worthy of deep affection, care, and devotion.",
-    "I trust myself to welcome the love that honors my soul.",
-    "My heart is strong enough to open and soft enough to receive.",
-    "I let love in without fear, force, or doubt.",
-    "I am lovable, valuable, and deserving of beautiful connection.",
-    "I welcome relationships that reflect respect, warmth, and truth.",
-    "I choose to receive love with grace and confidence.",
-    "The love meant for me finds me with ease.",
-    "I am open to giving and receiving love freely and fully."
-  ]},
-  "Releasing Shame": { e: "\uD83E\uDD8B", a: [
-    "I release shame and return to the truth of my worth.",
-    "My past is a teacher, not a life sentence.",
-    "I forgive myself and allow compassion to lead the way.",
-    "I am not my mistakes; I am my willingness to heal and grow.",
-    "I let go of harsh judgment and choose gentle understanding.",
-    "There is nothing shame can hold when love is present.",
-    "I release what was never mine to carry.",
-    "I honor my humanity and embrace my healing.",
-    "I am worthy of peace, even as I continue to grow.",
-    "I choose self-acceptance over self-punishment.",
-    "Shame dissolves when I meet myself with honesty and love.",
-    "I am learning, evolving, and becoming freer every day.",
-    "I no longer define myself by painful moments from the past.",
-    "I give myself permission to be imperfect and still deeply worthy.",
-    "I come home to myself with tenderness, truth, and grace."
-  ]},
-  "New Experiences": { e: "\u2604\uFE0F", a: [
-    "I welcome new experiences with curiosity, trust, and openness.",
-    "Life is bringing fresh possibilities to me every day.",
-    "I am ready to step beyond old limits and discover new joy.",
-    "I trust myself to meet the new with courage and grace.",
-    "Wonderful experiences are unfolding for me now.",
-    "I am open to change that expands my life in beautiful ways.",
-    "Each new experience teaches me, strengthens me, and awakens me.",
-    "I say yes to growth, adventure, and inspired possibilities.",
-    "The unknown can be exciting, supportive, and full of gifts.",
-    "I release resistance and allow life to surprise me kindly.",
-    "I am available for new doors to open.",
-    "I welcome fresh energy, fresh ideas, and fresh opportunities.",
-    "Life is meant to be lived, explored, and embraced.",
-    "I trust that new experiences are leading me toward something wonderful.",
-    "I move forward with an open heart and an open mind."
-  ]},
-  "People Upgrade": { e: "\uD83E\uDEC2", a: [
-    "I welcome uplifting, authentic, and aligned people into my life.",
-    "I am available for friendships and connections that feel nourishing.",
-    "The right people are finding me at the right time.",
-    "I attract kind, awake, and inspiring souls with ease.",
-    "I release relationships that drain me and make space for those who elevate me.",
-    "I am worthy of being surrounded by people who see and value me.",
-    "Healthy, mutual, and joyful connections are flowing into my life.",
-    "I trust life to introduce me to people who match my growth.",
-    "I allow my circle to evolve as I evolve.",
-    "I choose relationships that feel peaceful, energizing, and true.",
-    "Supportive and beautiful people belong in my life.",
-    "I am open to meeting people who expand my world for the better.",
-    "My life is becoming more aligned, and so are my relationships.",
-    "I welcome community, connection, and soul-aligned companionship.",
-    "I easily recognize and receive the people who are good for me."
-  ]},
-  "Harmonious Family": { e: "\uD83C\uDFE1", a: [
-    "Harmony, understanding, and healing flow through my family relationships.",
-    "I choose peace where there was once tension.",
-    "Love has the power to soften and restore my family connections.",
-    "I bring calm, compassion, and patience into my home.",
-    "I release old patterns and welcome a new way of relating.",
-    "My family can grow in love, respect, and understanding.",
-    "I choose to see the highest good in those I love.",
-    "Peace begins within me and blesses my family.",
-    "I welcome healthy communication and mutual care.",
-    "Healing energy surrounds my family and guides us gently.",
-    "I allow more grace, warmth, and connection into our relationships.",
-    "My home is becoming a place of harmony and safety.",
-    "I release resentment and make room for peace.",
-    "Love, truth, and kindness are guiding my family now.",
-    "I trust that harmony can grow one loving moment at a time."
-  ]},
-  "Being Generous": { e: "\uD83E\uDE77", a: [
-    "I give from a full and grateful heart.",
-    "Generosity expands my life and blesses others.",
-    "There is joy in sharing my time, love, and resources.",
-    "I trust that what I give with love returns in beautiful ways.",
-    "I am generous with kindness, patience, and encouragement.",
-    "Giving and receiving are both natural parts of a healthy life.",
-    "My generosity creates ripples of goodness in the world.",
-    "I love being a source of support, warmth, and blessing.",
-    "I share freely without fear of losing.",
-    "There is always enough within me to offer something meaningful.",
-    "I choose an open heart over a guarded one.",
-    "Generosity keeps me connected to abundance and love.",
-    "I bless others with what I have and who I am.",
-    "I give with joy, wisdom, and balance.",
-    "The more love I share, the more alive I feel."
-  ]},
-  "Being in the Flow": { e: "\uD83C\uDF0A", a: [
-    "I relax and trust the natural flow of life.",
-    "I do not need to force what is already finding its way to me.",
-    "Life supports me when I move with trust and presence.",
-    "I release struggle and allow ease to guide me.",
-    "I am in harmony with the rhythm of my own life.",
-    "What is meant for me unfolds in the right way and the right time.",
-    "I let go of resistance and welcome divine timing.",
-    "I trust the unfolding, even when I cannot yet see the whole picture.",
-    "Ease, clarity, and momentum flow through me now.",
-    "I move forward with calm confidence and inner alignment.",
-    "I allow life to work with me, not against me.",
-    "The path becomes clear as I stay open and present.",
-    "I am guided, supported, and carried by something greater.",
-    "I choose peace over pressure and trust over control.",
-    "I am learning to flow with life instead of fighting it."
-  ]},
-  "Letting Go": { e: "\uD83C\uDF43", a: [
-    "I lovingly release what no longer supports my highest good.",
-    "It is safe for me to let go and move forward.",
-    "I free myself from old patterns, old pain, and old stories.",
-    "I no longer need to carry what has already taught me enough.",
-    "Letting go creates space for peace, clarity, and new blessings.",
-    "I release with gratitude and welcome what is next.",
-    "The past is complete, and I am free to begin again.",
-    "I surrender what feels heavy and choose what feels true.",
-    "I let go of attachments that keep me small or stuck.",
-    "Releasing is an act of self-respect and self-love.",
-    "I am ready to clear space for something better.",
-    "I trust that what leaves is making room for what belongs.",
-    "I release with grace, not fear.",
-    "I choose freedom over familiarity.",
-    "Every breath out helps me let go and lighten my heart."
-  ]}
+/* ---------------- DATA ---------------- */
+/* 32 categories grouped into 7 themes. Each holds ~28 affirmations. */
+
+const ICONS = {
+  heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+  sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/></svg>',
+  star:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+  moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>',
+  diamond:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 9 12 22 2 9 12 2"/><line x1="2" y1="9" x2="22" y2="9"/></svg>',
+  flower:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3a3 3 0 0 0 0 6 3 3 0 0 0 0-6z"/><path d="M12 15a3 3 0 0 0 0 6 3 3 0 0 0 0-6z"/><path d="M3 12a3 3 0 0 0 6 0 3 3 0 0 0-6 0z"/><path d="M15 12a3 3 0 0 0 6 0 3 3 0 0 0-6 0z"/></svg>',
+  feather:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>',
+  leaf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19.2 2.96c1.4 9.3-3.6 17.04-8.2 17.04-2.7 0-4.5-1.5-4.5-4 0-3 2.5-4 6-4"/></svg>',
+  globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+  coins:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><path d="M22 17a6 6 0 0 1-12 0"/></svg>',
+  briefcase:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+  spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>',
+  gift:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>',
+  hands:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V6a2 2 0 0 1 4 0v5"/><path d="M5 11h14a2 2 0 0 1 2 2v3a6 6 0 0 1-6 6h-6a6 6 0 0 1-6-6v-3a2 2 0 0 1 2-2z"/></svg>',
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  key:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3"/></svg>',
+  mountain:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3l4 8 5-5 5 15H2L8 3z"/></svg>',
+  compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>',
+  wave:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/><path d="M2 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>',
+  fire:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+  drop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69 5.5 9.19a7 7 0 1 0 13 0z"/></svg>',
+  bird:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 1 0-7.99-.001"/><path d="M2 20s4-2 6-2 4 2 6 2 4-2 6-2"/><path d="M16 7c-2 4-4 7-9 11"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  flame:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C8 6 6 9 6 13a6 6 0 0 0 12 0c0-2-1-4-3-6 0 2-1 3-2 3 0-3-1-5-1-8z"/></svg>',
+  car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l2-6h14l2 6"/><rect x="3" y="13" width="18" height="6" rx="1"/><circle cx="7" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>',
+  flag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4l8 3 8-3v12l-8 3-8-3z"/></svg>',
+  cup:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2v4a6 6 0 0 0 12 0V2z"/><path d="M18 6h2a2 2 0 0 1 0 4h-2"/><path d="M9 22h6"/><path d="M12 12v10"/></svg>',
+  butterfly:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c-3-5-9-5-9 0 0 4 4 7 9 7s9-3 9-7c0-5-6-5-9 0z"/><path d="M12 12v7"/></svg>',
+  rainbow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18a10 10 0 0 1 20 0"/><path d="M5 18a7 7 0 0 1 14 0"/><path d="M8 18a4 4 0 0 1 8 0"/></svg>',
+  candle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-1 2-2 3-2 5a2 2 0 0 0 4 0c0-2-1-3-2-5z"/><rect x="8" y="9" width="8" height="13" rx="1"/></svg>',
+  petal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c4 6 4 12 0 20-4-8-4-14 0-20z"/></svg>'
 };
 
-let cur = null, last = -1;
-
-function init() {
-  const c = document.getElementById('cats');
-  for (const [name, d] of Object.entries(data)) {
-    const el = document.createElement('div');
-    el.className = 'category-card';
-    el.onclick = () => open(name);
-    el.innerHTML = `
-      <div class="cat-emoji">${d.e}</div>
-      <div class="cat-label">${name}</div>
-      <svg class="cat-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-    `;
-    c.appendChild(el);
+const THEMES = [
+  {
+    name: "Inner Light",
+    cats: [
+      { id:"self-love",       name:"Self Love",        icon:"heart" },
+      { id:"self-worth",      name:"Self Worth",       icon:"diamond" },
+      { id:"confidence",      name:"Confidence",       icon:"flame" },
+      { id:"self-forgive",    name:"Self Forgiveness", icon:"feather" },
+      { id:"inner-peace",     name:"Inner Peace",      icon:"moon" },
+      { id:"joy",             name:"Joy & Lightness",  icon:"sun" }
+    ]
+  },
+  {
+    name: "Abundance Flow",
+    cats: [
+      { id:"prosperity",      name:"Wealth & Prosperity", icon:"coins" },
+      { id:"receiving-money", name:"Receiving Money",      icon:"gift" },
+      { id:"career",          name:"Career & Purpose",     icon:"briefcase" },
+      { id:"new-business",    name:"Starting a Business",  icon:"spark" },
+      { id:"beautiful-things",name:"Beautiful Things",     icon:"star" }
+    ]
+  },
+  {
+    name: "Love & Connection",
+    cats: [
+      { id:"attract-love",    name:"Attracting Love",    icon:"heart" },
+      { id:"receive-love",    name:"Receiving Love",     icon:"hands" },
+      { id:"healthy-rel",     name:"Healthy Relationships", icon:"flower" },
+      { id:"family",          name:"Family Harmony",     icon:"home" },
+      { id:"friendship",      name:"Friendship",         icon:"globe" },
+      { id:"forgive-others",  name:"Forgiving Others",   icon:"feather" }
+    ]
+  },
+  {
+    name: "New Chapters",
+    cats: [
+      { id:"embrace-change",  name:"Embracing Change",   icon:"butterfly" },
+      { id:"new-beginnings",  name:"New Beginnings",     icon:"flag" },
+      { id:"courage",         name:"Courage",            icon:"shield" },
+      { id:"moving-home",     name:"Moving Home",        icon:"home" },
+      { id:"renovating",      name:"Renovating Space",   icon:"key" },
+      { id:"new-car",         name:"A New Vehicle",      icon:"car" },
+      { id:"opportunities",   name:"New Opportunities",  icon:"compass" }
+    ]
+  },
+  {
+    name: "Healing & Release",
+    cats: [
+      { id:"release-past",    name:"Releasing the Past", icon:"leaf" },
+      { id:"release-shame",   name:"Releasing Shame",    icon:"drop" },
+      { id:"release-anxiety", name:"Releasing Anxiety",  icon:"wave" },
+      { id:"healing-body",    name:"Healing the Body",   icon:"petal" },
+      { id:"better-sleep",    name:"Better Sleep",       icon:"moon" },
+      { id:"grief",           name:"Moving Through Grief", icon:"candle" }
+    ]
+  },
+  {
+    name: "Spirit & Flow",
+    cats: [
+      { id:"trust-life",      name:"Trust in Life",      icon:"mountain" },
+      { id:"divine-timing",   name:"Divine Timing",      icon:"star" },
+      { id:"flow",            name:"Being in the Flow",  icon:"wave" },
+      { id:"gratitude",       name:"Gratitude",          icon:"cup" },
+      { id:"morning",         name:"Morning Light",      icon:"sun" },
+      { id:"evening",         name:"Evening Calm",       icon:"moon" }
+    ]
   }
+];
+
+const A = {
+"self-love": [
+"I am loved, I am loveable, and I am love itself.",
+"I treat myself with the tenderness I would offer to a beloved friend.",
+"It is safe for me to love who I am, exactly as I am right now.",
+"I am learning to be my own gentle home.",
+"My heart and my body are sacred, and I honor them every day.",
+"I no longer wait to be perfect before I love myself.",
+"I speak to myself with kindness, patience, and respect.",
+"I am worthy of my own attention, my own care, and my own time.",
+"My worth was never up for negotiation.",
+"I bless every part of me, including the parts still healing.",
+"I am the one I have been waiting for.",
+"My presence is enough; I do not have to perform to be loved.",
+"I receive my own love deeply, the way a flower receives the rain.",
+"I am proud of how far I have come, and gentle with how far I have to go.",
+"I look at myself in the mirror and softly say: I love you, and I am here.",
+"My body is the only one I will ever have, and I love it into wellness.",
+"I forgive myself for forgetting how beautiful I am.",
+"I am allowed to take up space in the world.",
+"My uniqueness is a gift, not a flaw.",
+"I love the soul that lives inside this skin.",
+"I welcome love into the deepest, quietest rooms of my heart.",
+"I deserve softness, slowness, and care.",
+"My past does not disqualify me from love; it deepens my capacity for it.",
+"I choose me, lovingly, again and again.",
+"I am safe inside my own heart.",
+"There is enough love in the universe for me, and it begins within.",
+"My inner child is held, heard, and adored.",
+"I am the keeper of my own peace and the giver of my own grace.",
+"Loving myself is not selfish; it is sacred.",
+"I am whole, beloved, and complete just as I am."
+],
+"self-worth": [
+"I am infinitely worthy of love, respect, and a beautiful life.",
+"My worth was decided the moment I was created; nothing can subtract from it.",
+"I no longer measure my value by what I produce or what others think.",
+"I am enough. I have always been enough. I will always be enough.",
+"I deserve good things simply because I exist.",
+"My worth does not rise or fall with my mood, my mistakes, or my moments.",
+"I release the lie that I must earn my place in this world.",
+"I am a luminous expression of life, and I belong here.",
+"I honor my own value, even when others fail to see it.",
+"I rise above old voices that told me I was less than.",
+"My existence is a yes from the universe.",
+"I deserve respect from every relationship I am in.",
+"I no longer accept what is beneath my dignity.",
+"I am worthy of my dreams, and my dreams are worthy of me.",
+"I claim my place at every table I am called to.",
+"I do not have to apologize for being who I am.",
+"Other people's opinions are not my measuring stick.",
+"My intuition tells me the truth: I am precious.",
+"I am worthy of being truly seen, deeply heard, and well loved.",
+"What I bring to this world matters.",
+"My voice deserves to be heard.",
+"I deserve ease, grace, and goodness.",
+"I trust the worth that lives inside me.",
+"I am not too much, and I have never been too little.",
+"I am allowed to want what I want without shame.",
+"I am beautifully made and dearly held.",
+"My value is permanent; my circumstances are temporary.",
+"I am worthy of being chosen, cherished, and celebrated.",
+"My very being is a blessing.",
+"I rest inside the unshakeable truth of my worth."
+],
+"confidence": [
+"I trust myself completely; I always know my next right step.",
+"I move through my life with quiet, steady confidence.",
+"I belong wherever I choose to stand.",
+"My voice matters and my words carry weight.",
+"I no longer shrink to make others comfortable.",
+"I am brave enough to be fully myself.",
+"I act on my insight even when others do not yet understand.",
+"My confidence does not require permission.",
+"I am calm, capable, and clear.",
+"I am exactly the person I have been working to become.",
+"I rise to meet every moment of my life with grace.",
+"My presence carries peace and power.",
+"I trust my decisions; I trust my timing; I trust my truth.",
+"Fear no longer drives my choices; love does.",
+"I show up for my life with steady courage.",
+"I am ready, and I have always been more ready than I knew.",
+"My wisdom is older than my doubt.",
+"I am the calm in my own life.",
+"I stand tall in who I am, today and always.",
+"My confidence is rooted in my relationship with myself.",
+"I am safe to be seen, to be heard, to be known.",
+"I expect good things, and I notice them when they come.",
+"I do hard things with grace.",
+"My self-trust grows every time I keep a promise to myself.",
+"I am the kind of person things work out for.",
+"I am qualified by my willingness, not my perfection.",
+"I am a peaceful, powerful presence in any room.",
+"My competence is real, my instincts are sound, my path is mine.",
+"I no longer ask the world for proof that I am enough.",
+"I am steady, grounded, and gloriously sure of myself."
+],
+"self-forgive": [
+"I forgive myself fully and freely, and I begin again.",
+"My past is a teacher, not a judge.",
+"I did the best I could with what I knew at the time.",
+"I release the heavy chains of self-blame.",
+"I am not my mistakes; I am the love that keeps choosing to grow.",
+"Compassion meets every place I once condemned.",
+"I no longer punish myself for being a learning soul.",
+"I deserve the same forgiveness I so easily give to others.",
+"I let the past be the past, and I welcome a fresh page.",
+"I release every story that begins with how could I.",
+"My healing is more important than my guilt.",
+"It is safe to forgive myself and walk on.",
+"My future does not need my past to keep paying for itself.",
+"Each breath frees me a little more.",
+"I lay my regrets down at the door of grace.",
+"I am worthy of starting again, today and always.",
+"Forgiveness is the gift I keep giving myself.",
+"I see myself the way the universe sees me: tenderly.",
+"I release shame and welcome wisdom.",
+"I am a soft and growing being, and I forgive my unfolding.",
+"My imperfections are part of my beauty.",
+"I close the doors that no longer need my standing in them.",
+"I free myself with the keys of love and understanding.",
+"What I once held against myself, I now hold with mercy.",
+"I forgive the version of me who did not know yet.",
+"I trust that I am becoming the person I needed long ago.",
+"My heart is allowed to rest from the weight of regret.",
+"I am gentle with my human, beautiful, learning self.",
+"I am free, I am free, I am free.",
+"I forgive myself, and I welcome peace into every cell of my being."
+],
+"inner-peace": [
+"I am at peace with what is, and I rest in the quiet within me.",
+"My mind grows still and my heart grows soft.",
+"Peace is my natural state and I return to it again and again.",
+"I breathe in calm; I breathe out everything I no longer need.",
+"In this moment, all is well.",
+"My nervous system is safe; I let my whole body relax.",
+"I release the urge to fix, force, or figure everything out.",
+"There is a sanctuary inside me, and I can enter it at any time.",
+"I do not have to carry what is not mine to carry.",
+"I unhook from worry and rest in the present moment.",
+"My peace is more important than my opinions about anything.",
+"I let my thoughts pass like clouds across an open sky.",
+"I am the still, deep center of my own life.",
+"Quiet is not empty; it is full of my own gentle presence.",
+"I lay down the hurry I never needed in the first place.",
+"I am safe. I am held. I am here.",
+"Stillness is teaching me everything I need to know.",
+"I move at the pace of grace.",
+"I trust the silence; it is where my wisdom speaks.",
+"Nothing outside of me needs to change for me to feel peace inside.",
+"I let go of the tightness in my jaw, my shoulders, my chest.",
+"Peace pours into every place that was once tight with worry.",
+"I am the calm beneath the noise.",
+"The world can be loud; my inside can be quiet.",
+"I forgive what is, and I bow to what is unfolding.",
+"I claim peace as my birthright.",
+"My breath is a doorway to stillness.",
+"Each exhale settles me deeper into ease.",
+"I do not have to earn rest; rest is my home.",
+"I am peace, and peace is me."
+],
+"joy": [
+"Joy is my birthright, and I welcome it back into my life today.",
+"I look for the light, and I always find it.",
+"I let myself laugh, play, and feel delighted again.",
+"My joy is not dependent on my circumstances.",
+"I notice the small wonders woven through my ordinary day.",
+"I choose lightness whenever lightness is available.",
+"There is so much to enjoy about being alive.",
+"I let happiness be simple again.",
+"I no longer wait for permission to enjoy my own life.",
+"My heart rises like the sun; my mood follows.",
+"I feel the goodness of being here.",
+"I open the windows of my heart and let joy in.",
+"Today is allowed to surprise me.",
+"I take pleasure in small, sacred things: warm water, sunlight, breath.",
+"Joy is finding me everywhere I am willing to look.",
+"I deserve to feel deeply, beautifully alive.",
+"I let myself smile for no reason at all.",
+"My laughter is healing; my play is sacred.",
+"I welcome moments of pure, easy delight.",
+"Joy lives in the present moment, and I live there too.",
+"My inner child is invited back to the table of my life.",
+"I am light, I am joyful, I am free.",
+"Goodness keeps finding me, and I keep saying yes.",
+"I do not need to suffer to deserve good things.",
+"I let myself be happy without apology.",
+"My joy is contagious and uplifts the whole world.",
+"I dance through my life, even when nothing is playing.",
+"I am made for joy, and joy is made for me.",
+"I let joy rise in my chest and spill into my voice.",
+"I am alive, I am here, and that itself is wonderful."
+],
+"prosperity": [
+"I am a magnet for prosperity in expected and unexpected ways.",
+"Money flows to me easily, freely, and abundantly.",
+"I open my arms wide to the wealth that is mine to receive.",
+"There is more than enough for me, and more than enough for everyone I love.",
+"Abundance is my natural state.",
+"I deserve to live a rich, beautiful, well-resourced life.",
+"I welcome wealth without guilt, fear, or apology.",
+"Every door of opportunity is opening for me now.",
+"My income rises continually and my life expands to meet it.",
+"I trust the universe's lavish, unending abundance.",
+"I am a wise, loving steward of money.",
+"The more I have, the more I can give and create and bless.",
+"I release every belief that says wealth is for other people.",
+"Money is energy, and I welcome it with respect and joy.",
+"My prosperity blesses my family, my community, and my world.",
+"I am open to receiving in ways I never imagined.",
+"Lavish abundance is available to me right now.",
+"My bank account reflects the goodness flowing into my life.",
+"I attract the right opportunities at the right time.",
+"I think prosperous thoughts; I make prosperous choices; I live a prosperous life.",
+"I expect good, and good keeps showing up.",
+"My financial life is healing, growing, and thriving.",
+"I welcome unexpected income from inspired sources.",
+"Wealth is safe in my hands.",
+"I am so grateful for the abundance already present in my life.",
+"The more I trust, the more I receive.",
+"My prosperity is a sacred yes to my own life.",
+"I align with the energy of overflow.",
+"I am wealthy in love, time, opportunity, friendship, and money.",
+"I allow myself to live the prosperous life I came here for."
+],
+"receiving-money": [
+"I am open to receiving money from many beautiful sources.",
+"Money loves me and finds its way to me with ease.",
+"It is safe for me to be paid well for who I am and what I offer.",
+"I receive with grace, gratitude, and an open heart.",
+"I no longer block the abundance trying to reach me.",
+"I deserve to be paid generously for my time, talent, and presence.",
+"Unexpected money arrives in surprising and delightful ways.",
+"I welcome cheques, gifts, raises, refunds, and lavish opportunities.",
+"My hands are open, my heart is open, my life is open to receiving.",
+"I am worthy of receiving without earning my worth first.",
+"I let go of the belief that taking less makes me good.",
+"I gladly let money flow to me as a sign of my own self-respect.",
+"Every dollar that comes to me is a yes from life.",
+"I receive money joyfully and use it consciously.",
+"There is nothing shameful about wanting more.",
+"Wealth is safe in my hands and welcome in my life.",
+"I open my arms to all the good that is being sent my way.",
+"I am a peaceful, powerful receiver.",
+"I am no longer afraid of being abundant.",
+"I make space for money to land in my life.",
+"I am the kind of person money flows toward.",
+"I receive easily; I do not have to struggle to be supported.",
+"Abundance is finding me even while I rest.",
+"I expect money in expected and unexpected ways.",
+"I bless every coin and every cheque that arrives.",
+"My income is rising, and I welcome each new level.",
+"I deserve to be lavishly supported as I do my soul's work.",
+"My value is increasing; my pay is increasing; my joy is increasing.",
+"I receive freely so I can give freely.",
+"Yes, yes, yes — to more, to ease, to abundance."
+],
+"career": [
+"I am living my purpose more fully every day.",
+"My work is aligned, meaningful, and beautifully rewarded.",
+"I am led to the right people, the right rooms, and the right opportunities.",
+"My gifts make a real difference in the world.",
+"I am paid well for the love and skill I bring to my work.",
+"I trust my career to grow in inspired and unexpected ways.",
+"I am ready for the next level of what I am creating.",
+"My professional life is a beautiful expression of who I am.",
+"I do work that matters, and I am rewarded richly for it.",
+"I show up with confidence, clarity, and care.",
+"My career path is opening before me one good step at a time.",
+"I attract collaborators who lift me up and grow with me.",
+"I am respected, supported, and valued in my work.",
+"I deserve to love what I do.",
+"My calling and my income are merging into one beautiful life.",
+"I bring my full self to my work, and I am celebrated for it.",
+"I no longer have to choose between purpose and prosperity.",
+"My ideas are valuable and my contributions are seen.",
+"I am promoted, trusted, and elevated.",
+"I follow the inspiration that is guiding me forward.",
+"I release every old story that says my dream is too much.",
+"My professional growth is graceful and steady.",
+"My calendar fills with aligned and joyful work.",
+"I am a leader, a creator, and a quietly powerful presence.",
+"My career blesses my family and my freedom.",
+"I trust that my next chapter is greater than my last.",
+"My work flows from a place of strength, not depletion.",
+"I am doing what I came here to do.",
+"I am living proof that purpose pays.",
+"Every step I take is leading me to a richer, fuller, freer life."
+],
+"new-business": [
+"My business is a sacred extension of my soul's work in the world.",
+"My ideas are good, my timing is right, and the universe is with me.",
+"I attract the perfect clients, customers, and collaborators with ease.",
+"My business grows with grace, integrity, and joyful momentum.",
+"I am supported by unseen hands every step of the way.",
+"My business is a gift to the people it is meant to serve.",
+"I deserve to build something beautiful and be paid generously for it.",
+"I release the fear of being seen and step boldly into my work.",
+"Money flows into my business through expected and unexpected channels.",
+"My offer is needed, and the right people are finding it now.",
+"I trust myself to make wise, bold, soulful decisions.",
+"My business expands as I expand.",
+"I am not building alone; the universe is co-creating with me.",
+"Customers love what I do and tell others about me.",
+"I am a clear channel for inspired ideas.",
+"Every challenge is making my business stronger and clearer.",
+"I have everything I need to succeed, and what I do not yet have, I will receive.",
+"I am the founder, the dreamer, and the doer my vision needs.",
+"My business income rises beautifully and reliably.",
+"My work is welcomed, valued, and well paid.",
+"I trust the unfolding even when I cannot see the next step.",
+"I attract perfect-fit clients with ease.",
+"My calendar fills with joy-aligned, profitable work.",
+"I show up consistently, lovingly, and bravely.",
+"My business serves me as much as it serves others.",
+"I am building something that will outlast and outlove me.",
+"My energy, my offer, and my pricing are all aligned.",
+"I am a wise, grounded, prosperous business owner.",
+"I am proud of what I am creating.",
+"My business is becoming everything I have dreamed of, and more."
+],
+"beautiful-things": [
+"I deserve to be surrounded by beauty, comfort, and care.",
+"It is safe for me to enjoy beautiful, well-made things.",
+"I welcome lovely objects, spaces, and experiences into my life.",
+"Beauty calls to me, and I let myself answer.",
+"I dress myself, feed myself, and house myself with love.",
+"My environment is becoming a reflection of my inner light.",
+"I do not have to wait for a special occasion to live well.",
+"My home is filling with things that make my soul smile.",
+"I deserve the soft sheets, the good food, the warm light.",
+"Quality is welcome in every part of my life.",
+"I let myself want what I want without apology.",
+"I appreciate beautiful things without clinging to them.",
+"Wherever I am, I notice the beauty around me.",
+"I bring beauty into the spaces I live and work in.",
+"My life is allowed to feel rich, warm, and well loved.",
+"I am the kind of person beautiful things gather around.",
+"I trust that everything I love is on its way to me.",
+"I deserve to be beautifully clothed and beautifully housed.",
+"My standards are rising, and my life is rising with them.",
+"My senses delight in the beauty of my own life.",
+"I treat my body, my home, and my life like the temples they are.",
+"I welcome flowers, candles, art, and music into my days.",
+"Lovely things find me at the right time, for the right price.",
+"I am supported in living a beautiful, beautiful life.",
+"Joy lives in the details of how I treat myself.",
+"My ordinary days are becoming gently extraordinary.",
+"I am allowed to enjoy what I have created.",
+"I attract beauty in every room I walk into.",
+"I take exquisite care of myself and my belongings.",
+"I am alive in a beautiful world, and beautiful things are mine to enjoy."
+],
+"attract-love": [
+"I am ready for the kind of love that meets me fully.",
+"True love is finding me in perfect, divine timing.",
+"I am magnetic to a partner who is magnetic to me.",
+"The love that is meant for me cannot miss me.",
+"I am open, soft, and ready to receive a great love.",
+"My heart is healed enough to love and be loved.",
+"I attract a partner who is loving, awake, kind, and true.",
+"My love is a gift, and the right person will recognize it.",
+"I am no longer settling for what is beneath my soul.",
+"The love I am seeking is also seeking me.",
+"I deserve a love that is gentle, faithful, and freeing.",
+"I trust that the right relationship is on its way.",
+"I am preparing my life to welcome a beautiful love.",
+"My heart is open and my standards are high.",
+"I am loved, choosable, cherishable, beloved.",
+"I attract the love I am willing to give.",
+"My future partner is becoming ready for me as I am becoming ready for them.",
+"I release every old story about love that no longer serves me.",
+"I am so worthy of being chosen, every single day.",
+"I welcome a love that feels like home.",
+"I do not have to chase the love that is meant for me.",
+"I am safe to be vulnerable with the right person.",
+"My heart is brave, soft, and beautifully open.",
+"Love is safe for me now.",
+"The universe is conspiring to bring us together.",
+"I am whole on my own, and I welcome a love that adds to my wholeness.",
+"I am loveable, loving, and loved.",
+"My great love story is unfolding right now.",
+"I am the one I have been waiting for, and so is my partner.",
+"Love finds me with ease, with kindness, and with a deep, knowing yes."
+],
+"receive-love": [
+"I am safe to be loved in soft, deep, devoted ways.",
+"My heart opens easily to give and receive love.",
+"I let love in without flinching, without hiding, without earning.",
+"I deserve love that feels gentle, steady, and true.",
+"I am loveable just as I am, today, here, now.",
+"It is safe for me to be cherished.",
+"I no longer push away the love that is right in front of me.",
+"I receive compliments, care, and kindness with open hands.",
+"I am worthy of devotion.",
+"I let people show me how loved I am.",
+"I welcome being chosen, again and again and again.",
+"My heart is allowed to soften now.",
+"I am safe to need, to ask, to receive.",
+"I am a beloved being.",
+"Love does not have to hurt to be real.",
+"I open the doors of my heart to a healthier kind of love.",
+"I let love land.",
+"I am held by love in every moment of my life.",
+"It is safe to be tenderly cared for.",
+"I trust the love that is being offered to me.",
+"I receive love without trying to control it.",
+"I am loveable in my softness, in my strength, in my mess, in my joy.",
+"I let myself be adored.",
+"My heart is a sanctuary, and love is welcome here.",
+"I let myself feel chosen.",
+"I do not have to be perfect to be loved.",
+"I am surrounded by more love than I have known how to feel.",
+"My heart heals every time I let love in.",
+"I deserve the kind of love I would offer anyone I cared about.",
+"I am loved, I am loved, I am loved."
+],
+"healthy-rel": [
+"My relationships are loving, honest, balanced, and true.",
+"I attract people who match my values and lift my spirit.",
+"I deserve relationships in which I feel safe, seen, and celebrated.",
+"I no longer accept what is beneath my dignity in any relationship.",
+"My boundaries are sacred, and they are honored.",
+"My yes is real, and my no is respected.",
+"I communicate with clarity and kindness.",
+"I am held by people who hold me with care.",
+"I am the kind of person who creates healthy, peaceful relationships.",
+"I release every dynamic that drains me, and welcome those that nourish me.",
+"My relationships are reciprocal: I give, and I receive.",
+"I do not have to perform to be loved or chosen.",
+"I am loved for who I am, not for what I do.",
+"I am worthy of being met halfway, every time.",
+"I welcome connection that feels like coming home.",
+"I trust myself to choose well in love and in friendship.",
+"I am safe to be honest with the people closest to me.",
+"My relationships grow stronger, kinder, and clearer.",
+"I let go of those who cannot meet me, and I bless them as I do.",
+"I am surrounded by people who truly want what is good for me.",
+"My presence is a gift to the people I am in relationship with.",
+"I am a calm, loving, grounded presence in my close relationships.",
+"My relationships reflect the love I now have for myself.",
+"I am ready for healthy love and healthy friendship.",
+"I am at peace with how relationships come and go.",
+"I am loved well, and I love well in return.",
+"I trust the right people to find me at the right time.",
+"My relationships are spaces of growth and joy.",
+"I create safe, loving connections wherever I go.",
+"I am cherished, respected, and deeply loved."
+],
+"family": [
+"My family is wrapped in healing, peace, and love.",
+"I bring calm and compassion into my home.",
+"Old patterns end with me; new love begins with me.",
+"My family is finding more harmony every day.",
+"I see the divine in every member of my family, even when it is hidden.",
+"I release resentment and welcome understanding.",
+"My home is a sanctuary of gentleness.",
+"I am a healing presence in my family line.",
+"I forgive what needs to be forgiven, and I bless what needs to be released.",
+"My family relationships are softening and healing in beautiful ways.",
+"I do not have to fix everyone; I only have to bring my own peace.",
+"Love is rebuilding what time has worn down.",
+"I speak with kindness, listen with patience, and choose connection.",
+"My ancestors are healing through me.",
+"My children, my parents, my siblings, my chosen family — I bless you all.",
+"I let go of the old roles I was forced to play.",
+"I am free to love my family from a healthy distance or a close embrace.",
+"Peace begins inside me and rippls outward into my family.",
+"My family is finding a new, gentler rhythm.",
+"I am safe to be myself with my family.",
+"There is room for everyone's truth, including mine.",
+"I trust love to do its slow, steady work in my family.",
+"My home is filled with laughter, warmth, and easy conversation.",
+"My family members are doing the best they can, and so am I.",
+"I bring grace into rooms where there used to be tension.",
+"I am proud of my family, and I am proud to be part of it.",
+"I bless every meal we share, every silence we hold, every memory we make.",
+"Healing is happening, even when I cannot see it.",
+"My family is my sacred, imperfect, beautiful tribe.",
+"Love is the language of my home now."
+],
+"friendship": [
+"I am surrounded by friends who love, see, and celebrate me.",
+"I attract loyal, kind, and inspiring people into my circle.",
+"I am a wonderful friend, and I receive wonderful friendship in return.",
+"My closest friends are the family I get to choose.",
+"I deserve friendships that feel easy, safe, and joyful.",
+"My circle is filling with people who match my growth.",
+"I let go of friendships that drain me, with love and without bitterness.",
+"I welcome new friendships at exactly the right time.",
+"I am safe to be vulnerable with the right people.",
+"My friendships are reciprocal, real, and beautifully alive.",
+"I am the kind of friend I would love to have.",
+"I trust life to introduce me to people who feel like home.",
+"My old friends are deepening, and new friends are arriving.",
+"I am loved, supported, and accompanied on this journey.",
+"My friends celebrate my wins as if they were their own.",
+"I am part of a quiet, strong network of love.",
+"I do not have to be the entertainer or the fixer to be loved by my friends.",
+"My friendships are soulful and sustaining.",
+"I am open to making friends at any age, in any chapter.",
+"Real friendship is mine, and it is everywhere.",
+"I bless every friend who has walked any part of this path with me.",
+"I cherish the people who have stayed, and I release the ones who have gone.",
+"I am magnetic to good people.",
+"My presence is a gift to my friends.",
+"I am fortunate in love, and I am fortunate in friendship.",
+"I welcome deep, hilarious, sustaining connections.",
+"I am surrounded by light-bringers.",
+"My friendships make my life richer and braver.",
+"I am loved by people who really know me.",
+"I have everything I need in my circle, and more is on the way."
+],
+"forgive-others": [
+"I forgive, not because they deserve it, but because I do.",
+"I release the past from the grip it has had on me.",
+"I free myself by setting down what I no longer want to carry.",
+"Forgiveness is the door I open into my own peace.",
+"I am no longer chained to people who hurt me.",
+"I let go with love and step into the freedom that has always been mine.",
+"My forgiveness does not require their apology.",
+"I bless and release every person and situation that ever caused me pain.",
+"My peace is more important than my resentment.",
+"I choose to be free.",
+"I am bigger than what happened to me.",
+"I forgive them in my heart and I release them from my future.",
+"Forgiveness flows through me like a clean, gentle river.",
+"I do not have to keep reliving what they did.",
+"I can love them from a distance and love myself up close.",
+"I lay this story down and pick up my freedom.",
+"What was done is done; I am not done.",
+"I free myself by no longer rehearsing the wound.",
+"Forgiveness is a gift I give myself.",
+"I bless the path that brought me here, even the painful parts.",
+"I no longer wait for closure; I create it within myself.",
+"My future is not a prisoner of my past.",
+"I take back the energy I have spent on resentment, and I use it to live.",
+"I am free; I am free; I am free.",
+"My heart is being made gentle again by forgiveness.",
+"I trust life to handle what only life can handle.",
+"My energy is too sacred to spend on anger.",
+"I leave the past in the past, where it belongs.",
+"I forgive them, and I forgive myself for any part I played.",
+"Forgiveness lifts me into a higher, lighter, freer life."
+],
+"embrace-change": [
+"Change is the universe loving me into something new.",
+"I welcome change as a friend, not as an enemy.",
+"I trust the changes that are unfolding in my life.",
+"Every ending is making room for a beautiful beginning.",
+"I move with change, not against it.",
+"I am safe even when everything around me is shifting.",
+"My life is rearranging itself for a higher good.",
+"I release my grip on what was, and I open my hand to what is becoming.",
+"Change is not happening to me; it is happening for me.",
+"I am graceful and brave in the face of transformation.",
+"I am being remade in the most loving way possible.",
+"I trust that what is leaving was meant to leave.",
+"I trust that what is arriving was meant to arrive.",
+"Change is the river; I am learning to flow.",
+"I am made for this season of my life.",
+"I welcome all the new I cannot yet see.",
+"The unknown is full of gifts.",
+"I am stronger, wiser, and more open because of change.",
+"My future is being beautifully rewritten.",
+"I do not need to know how it all ends; I only need to keep walking.",
+"Change is shaking loose what was never mine to keep.",
+"I am being repositioned for something greater.",
+"I bless this in-between space.",
+"I am right where I need to be, and I am moving where I need to go.",
+"I trust the shape my life is taking.",
+"I let go of the old version of me with love.",
+"I welcome the next version of me with reverence.",
+"Change is sacred; I am sacred; I am safe.",
+"My life is becoming what I always longed for.",
+"I am brave enough to become someone new."
+],
+"new-beginnings": [
+"Today is a beautiful new page, and I am holding the pen.",
+"I begin again, with grace, with hope, and with trust.",
+"My past does not get to write my future.",
+"I welcome a fresh start in every area of my life that needs one.",
+"This is the beginning of something quietly extraordinary.",
+"The slate is clean, and so am I.",
+"I am ready for the new chapter that is opening for me.",
+"I trust the timing of this new beginning.",
+"I welcome the people, places, and possibilities of this new season.",
+"I am free to create something different now.",
+"I bring my whole self to this fresh start.",
+"My new beginning is supported by everything that came before.",
+"I am ready, and I am willing, and I am open.",
+"I release the old story; I embrace the new one.",
+"My life is allowed to look completely different now.",
+"I begin from where I am, with what I have, in love.",
+"This is my season of beginnings.",
+"I trust myself to build something beautiful from here.",
+"I am gentle with myself as I find my footing in this new chapter.",
+"Every fresh start is a sacred yes to myself.",
+"I let the universe surprise me kindly.",
+"I welcome new doors, new opportunities, new dreams.",
+"I am brave enough to start over, and brave enough to start small.",
+"I bless the courage it took to get me here.",
+"I am proud of beginning again.",
+"My new beginning is unfolding in perfect divine timing.",
+"I welcome the unknown with curiosity.",
+"I trust that something good is on its way.",
+"I begin, again and again and again, with love.",
+"I am the author of this next beautiful chapter."
+],
+"courage": [
+"I am brave enough for whatever this day asks of me.",
+"Courage rises in me as I take the next step.",
+"I do not have to feel ready to be brave.",
+"I am held as I move into the unknown.",
+"My courage is bigger than my fear.",
+"I take action even when my heart is shaking.",
+"I am stronger than I have ever realized.",
+"I do hard things with grace.",
+"I am brave, and I am tender, and both are sacred.",
+"I trust myself to handle whatever comes.",
+"I do not back down from my dreams.",
+"I find courage in my breath and in my bones.",
+"I am supported by something greater than my fear.",
+"My fear and I walk together, and love leads us both.",
+"I have been brave before; I am brave now.",
+"I am made for this moment.",
+"I rise.",
+"I take the next small, brave step, again and again.",
+"My courage compounds; I become braver every day.",
+"I am safe to do scary, beautiful things.",
+"I am brave enough to be myself in any room.",
+"I am brave enough to leave what no longer serves me.",
+"I am brave enough to begin what is calling me.",
+"I trust the strength inside of me.",
+"I move forward; I do not retreat from my own life.",
+"I am the brave one I have been waiting for.",
+"My courage is a quiet, steady fire.",
+"I am supported by ancestors, by angels, by life itself.",
+"I face this with love, with breath, with backbone.",
+"I am unshakeable in my willingness to keep going."
+],
+"moving-home": [
+"My new home is preparing for me as I am preparing for it.",
+"I am being lovingly led to the right home, in the right place, at the right price.",
+"My move is supported, blessed, and beautifully timed.",
+"I trust that everything I need will come together with ease.",
+"I welcome the perfect home for this next chapter of my life.",
+"My new space will hold me, support me, and inspire me.",
+"I bless the home I am leaving for the love it gave me.",
+"I welcome the home I am moving toward with open arms.",
+"Doors open as I walk toward my new home.",
+"My new home is full of light, warmth, and good energy.",
+"I am safe in transition.",
+"My move is unfolding in divine, supported timing.",
+"My new neighborhood is welcoming and kind.",
+"I trust the universe to handle the details I cannot.",
+"My new home is already a sanctuary in spirit; it will be one in form.",
+"Everything I need for this move arrives at the right moment.",
+"I let go of clutter, baggage, and old energy as I move.",
+"I bless every box, every key, every keystroke that brings me closer to my new home.",
+"My new home is calling me, and I am answering.",
+"I am held by life as I make this move.",
+"My move is a sacred turning point.",
+"I welcome the freshness of new walls, new windows, new mornings.",
+"I am supported financially, emotionally, and practically as I move.",
+"My new space invites the next version of me.",
+"I trust the universe knows the perfect home for me.",
+"I am at peace with leaving, and at peace with arriving.",
+"My move blesses everyone involved.",
+"I let myself dream big about my next home.",
+"I am exactly where I need to be in this move.",
+"My new home is waiting for me, and I am ready."
+],
+"renovating": [
+"My home is being lovingly transformed into a sanctuary.",
+"Every change I make to my space is a blessing for my life.",
+"My home and I are growing more beautiful together.",
+"I welcome inspiration for every choice I make in my space.",
+"My home reflects who I am becoming, not just who I have been.",
+"My renovation flows smoothly, on time and on budget.",
+"The right craftspeople and resources find their way to me.",
+"I am creating a space that nourishes everyone who enters it.",
+"I trust the process, even when the dust is everywhere.",
+"My home is healing; my home is growing; my home is being loved on.",
+"I am free to imagine, design, and create.",
+"My ideas come together beautifully.",
+"My home is becoming a true reflection of my soul.",
+"Every wall, every color, every choice carries my love.",
+"My home is a partner in my evolution.",
+"I bless this house and the hands that work on it.",
+"My home will be more beautiful than I have dreamed.",
+"My space supports my health, my work, my family, my joy.",
+"I am patient with the unfinished and trusting of the becoming.",
+"My home is filled with light, warmth, and peace.",
+"I let myself love what I am creating.",
+"My renovation is a sacred act of self-care.",
+"I am proud of the space I am bringing to life.",
+"My home rises to meet me.",
+"I welcome ease, beauty, and resourcefulness throughout this project.",
+"The right materials, prices, and timing line up effortlessly.",
+"My home is a place I love coming back to.",
+"I am building something that will hold my life beautifully.",
+"My space is becoming a sanctuary, room by room.",
+"My home and I are co-creating something wonderful."
+],
+"new-car": [
+"My perfect vehicle is finding its way to me at the perfect time and price.",
+"I welcome a vehicle that is safe, beautiful, and well suited to my life.",
+"I deserve to drive in comfort, joy, and confidence.",
+"The right car finds me effortlessly.",
+"I am supported in this purchase, financially and practically.",
+"I am safe on every road I travel.",
+"My vehicle carries me into a new chapter with grace.",
+"I trust the universe to guide me to exactly the right car.",
+"My new vehicle is reliable, safe, and a joy to drive.",
+"I bless every mile and every journey that lies ahead.",
+"I am a wise, calm, attentive buyer.",
+"I am open to my car arriving in surprising and beautiful ways.",
+"My new car reflects the upgrade I am inviting into my life.",
+"I am worthy of a vehicle I love.",
+"I drive with ease, peace, and protection.",
+"My new car is part of a freer, fuller life.",
+"I welcome the freedom my new vehicle will give me.",
+"I am safe, blessed, and guided every time I get behind the wheel.",
+"My car is mine to enjoy, care for, and celebrate.",
+"I deserve smooth journeys and good roads.",
+"My vehicle search is unfolding gracefully and joyfully.",
+"I am led to the right people, the right deal, the right car.",
+"I bless this purchase as a sacred yes to my own life.",
+"My new car serves me well for years to come.",
+"My finances easily support this new vehicle.",
+"I am calm, clear, and confident in this decision.",
+"My vehicle is a blessing to me and to anyone who rides with me.",
+"My next car is already on its way to me.",
+"I welcome smooth roads and safe journeys.",
+"I am free, mobile, and beautifully resourced."
+],
+"opportunities": [
+"New opportunities are flowing toward me from every direction.",
+"I am ready, willing, and open for what is coming.",
+"I notice the doors that open, and I walk through the right ones.",
+"I trust myself to choose the opportunities that are truly mine.",
+"I am supported by perfect, divine timing.",
+"My next opportunity is bigger than I can yet imagine.",
+"I am the kind of person opportunities find.",
+"I say yes to what aligns and a peaceful no to what does not.",
+"I welcome new opportunities for love, work, money, and adventure.",
+"My life is rich with possibility.",
+"Every closed door points me toward a better one.",
+"I am magnetic to opportunity.",
+"I am led to the right people, conversations, and rooms.",
+"My intuition guides me to the right yes at the right time.",
+"I am open to opportunities I have not yet imagined.",
+"I trust the unseen support working on my behalf.",
+"My life is opening up in beautiful, unexpected ways.",
+"I am ready for the opportunity that is being prepared for me.",
+"I welcome chances, invitations, and inspired connections.",
+"I am stepping into a more aligned, abundant chapter of my life.",
+"Doors open as I walk toward them.",
+"I bless every opportunity that finds me.",
+"I am safe to take inspired risks.",
+"I am supported in saying yes to my own potential.",
+"I am being prepared and positioned for something wonderful.",
+"My life is brimming with green lights.",
+"I trust the unfolding; I trust the timing; I trust myself.",
+"I welcome the unknown with open hands.",
+"The right opportunity, at the right moment, is always finding me.",
+"I am alive in a world of possibility, and I am saying yes."
+],
+"release-past": [
+"I release the past with love and walk freely into now.",
+"What was, is no longer mine to carry.",
+"I lay down old stories that no longer fit my life.",
+"I free myself from every chapter that has already ended.",
+"I am no longer who I was, and I am no longer waiting for who I will be.",
+"My past has shaped me; it does not define me.",
+"I bless every old version of me, and I let them rest now.",
+"I close doors that are meant to be closed.",
+"What I have been carrying is allowed to be set down.",
+"I am free to live as the person I am today.",
+"I let go of regret, of replay, of returning to what is gone.",
+"I am free.",
+"My past is complete.",
+"I am ready to be fully here, fully now, fully alive.",
+"I release every grip, every grudge, every grief I have outgrown.",
+"What is gone is gone, and that is its blessing.",
+"I forgive myself for staying too long in places I needed to leave.",
+"I forgive myself for leaving places I needed to stay.",
+"I am at peace with how it all happened.",
+"My past is the soil; my present is the bloom.",
+"I no longer need to suffer to honor what I have lived through.",
+"I take the lessons and leave the pain.",
+"I trust that everything is already healing.",
+"I am gentle with the parts of me that are still letting go.",
+"I let it be done.",
+"I release; I release; I release.",
+"My energy returns to me from everywhere I have left it.",
+"I welcome the present; I welcome the present; I welcome the present.",
+"I have permission to be free.",
+"I am here now, and here is where my whole life is."
+],
+"release-shame": [
+"Shame does not get to live in my body anymore.",
+"I am not what happened to me, and I am not what I once did.",
+"I release the heavy weight of shame, gently, fully, completely.",
+"I am worthy, even in the moments I once felt unworthy.",
+"My body is not shameful; my heart is not shameful; my story is not shameful.",
+"I bring love to every place that once held shame.",
+"I am allowed to forgive myself.",
+"Shame loses its grip when I meet myself with truth.",
+"I am safe in my own skin.",
+"I no longer hide the parts of me that once felt unspeakable.",
+"I am whole, even where I was once told I was wrong.",
+"I lift the weight of shame off my shoulders, off my chest, off my voice.",
+"I am free to speak, to feel, to be.",
+"My past does not have authority over my present.",
+"I release inherited shame that was never mine to carry.",
+"My body is loved; my body is good; my body is mine.",
+"I am precious, beloved, and radiant.",
+"I am not too much, and I am not too little.",
+"My imperfection does not disqualify me from love.",
+"I am gentle with the part of me that learned to feel ashamed.",
+"I bring her, I bring him, I bring me, into the light of love.",
+"I am safe to be fully seen.",
+"I belong here.",
+"I am the same precious soul I have always been.",
+"Shame is not the truth; love is.",
+"I forgive myself for ever believing I was less than.",
+"I welcome wholeness in every cell.",
+"I am free.",
+"I am free.",
+"I am free."
+],
+"release-anxiety": [
+"I breathe in calm; I breathe out worry.",
+"My nervous system is safe; my body is safe; I am safe.",
+"I am held in this moment, exactly as I am.",
+"I let my shoulders drop and my breath deepen.",
+"I do not have to figure everything out right now.",
+"My mind is allowed to rest.",
+"This moment is okay, and this moment is enough.",
+"I trust life to take care of what I cannot.",
+"I release the urge to control everything.",
+"I am safe; I am here; I am breathing.",
+"My thoughts are not facts; they are passing weather.",
+"I am bigger than my anxious thoughts.",
+"I do not have to believe every fear my mind offers me.",
+"My breath is a doorway to peace.",
+"I am supported by something greater than my worry.",
+"My body is allowed to soften now.",
+"I let the tightness in my chest melt with each exhale.",
+"I am not alone in this; I have never been alone in this.",
+"I bring my attention back to my breath, again and again.",
+"I am gentle with my anxious self.",
+"I do not have to fight my anxiety; I can hold it with love.",
+"What I worry about most often does not come to pass.",
+"I am safe in my own life.",
+"My body knows how to find calm.",
+"Peace is closer than I think.",
+"I am held by the present moment.",
+"I trust the timing of everything that concerns me.",
+"My breath is steady, my mind is clearing, my heart is settling.",
+"I am okay. I will be okay. I have always been okay.",
+"All is well in my world right now."
+],
+"healing-body": [
+"My body is wise, and my body is healing.",
+"Every cell in my body is bathed in love and light.",
+"I trust my body to know how to come back to wholeness.",
+"I listen to my body with love and respect.",
+"My body is an ally, not an opponent.",
+"I bless every part of my body, even the parts that need extra care.",
+"I am healing in ways seen and unseen.",
+"My body responds beautifully to kindness.",
+"I nourish myself with food, rest, and presence.",
+"Healing is unfolding inside me right now.",
+"My body has carried me through so much, and I love it for that.",
+"I forgive my body for any way it ever felt to me.",
+"I forgive myself for any way I have ever spoken to my body.",
+"My body and I are friends now.",
+"Energy, vitality, and wellness flow through me.",
+"I welcome rest as part of my healing.",
+"I welcome movement as part of my healing.",
+"I welcome quiet as part of my healing.",
+"I welcome joy as part of my healing.",
+"My body responds to thoughts of health and harmony.",
+"I am stronger than I know, and gentler than I knew.",
+"I trust the slow, steady miracle of healing.",
+"My body deserves my tenderness.",
+"My body deserves my time.",
+"My body deserves my trust.",
+"I am whole, well, and held.",
+"My body is becoming a more peaceful place to live.",
+"I am healing because I am loved.",
+"I am healing because I am alive.",
+"Thank you, body. Thank you, body. Thank you, body."
+],
+"better-sleep": [
+"I release the day with grace and welcome deep, peaceful sleep.",
+"My body is ready to rest; my mind is ready to soften.",
+"I let go of everything I do not need to think about right now.",
+"Sleep comes easily and deeply tonight.",
+"My bed is a sanctuary; my breath is a lullaby.",
+"I am safe; I am held; I am free to rest.",
+"I welcome dreams that heal, soothe, and inspire.",
+"My nervous system is settling into stillness.",
+"Tomorrow can wait; tonight, I rest.",
+"I let my whole body sink into rest.",
+"I trust life to handle what cannot be solved tonight.",
+"My mind grows quiet as I let the day go.",
+"I welcome the gentle weight of sleep.",
+"I forgive the day; I bless the day; I release the day.",
+"My breath slows; my heart calms; my body rests.",
+"I deserve deep, restorative, beautiful sleep.",
+"My body knows how to rest, and I let it.",
+"I am safe in the dark.",
+"I am safe in my bed.",
+"I am safe in my dreams.",
+"Tonight, I let go of everything that is not mine to carry into morning.",
+"I am at peace with everything that happened today.",
+"I am at peace with everything that did not happen today.",
+"My body relaxes from my crown to my toes.",
+"My breath becomes my anchor; my breath becomes my lullaby.",
+"I welcome the healing that happens while I sleep.",
+"I am loved as I drift into rest.",
+"I trust myself to wake up renewed.",
+"All is well; all is well; all is well.",
+"I rest now."
+],
+"grief": [
+"My grief is the love that has nowhere to go right now, and I let it move through me.",
+"I am allowed to feel everything I feel.",
+"I am held even in the heaviest moments.",
+"My tears are sacred, and I let them fall.",
+"My grief is welcome here; it is not too much.",
+"I take the love that has no home and I let it bless me.",
+"I trust this slow, sacred process.",
+"I do not have to be okay yet.",
+"I am healing on a timeline I do not have to rush.",
+"Love does not end; love changes shape.",
+"I carry what I have lost as a quiet companion, not as a chain.",
+"My heart is broken open, not broken apart.",
+"I am supported in my grief, even when I cannot feel it.",
+"I bless this pain because of how deeply it loved.",
+"I am still here, and that is enough for today.",
+"I let people hold me when I cannot hold myself.",
+"I am not betraying anyone by smiling again.",
+"I am not betraying anyone by living fully again.",
+"Grief and joy can live in the same heart.",
+"My grief is a sign that I loved well.",
+"I am gentle with myself as I find my new normal.",
+"I am being remade by this loss in ways I cannot yet see.",
+"I trust that I will love again, in many forms.",
+"I do not have to understand this to live through it.",
+"There is no right way to grieve; my way is enough.",
+"I am held by love that is bigger than this loss.",
+"I am still becoming, even in this season.",
+"I let breath and time do their slow, healing work.",
+"My grief is a holy room, and I am allowed to sit in it.",
+"I am loved, I am held, and I am not alone."
+],
+"trust-life": [
+"I trust life; life is for me.",
+"Everything is unfolding for my highest good.",
+"What is meant for me cannot miss me.",
+"I am held by something greater than my plan.",
+"Life has been good to me, and life will be good to me.",
+"I trust the journey, even the parts I cannot understand.",
+"There is a wise, loving intelligence orchestrating my life.",
+"I let life surprise me kindly.",
+"I do not have to know how; I only have to trust.",
+"I trust the path, even when I cannot see the next step.",
+"I am supported in ways I am only beginning to recognize.",
+"Life is rearranging itself in my favor.",
+"I am not alone; I have never been alone.",
+"I am held, guided, and gently led.",
+"What is leaving was meant to leave; what is arriving was meant to arrive.",
+"I trust the timing of my life.",
+"I trust the people who are coming.",
+"I trust the doors that are opening.",
+"I trust the doors that are closing.",
+"I trust the becoming.",
+"I am safe in this life.",
+"I am safe in this body.",
+"I am safe in this moment.",
+"Everything is working out.",
+"All is unfolding as it is meant to.",
+"I rest in the goodness of life.",
+"I am led, loved, and looked after.",
+"The universe and I are in beautiful collaboration.",
+"I trust life to do what only life can do.",
+"All is well, and all will be well."
+],
+"divine-timing": [
+"I trust the perfect, divine timing of my life.",
+"What is mine is on its way; I do not have to chase it.",
+"My timing is not late; my timing is sacred.",
+"Right things happen at right times.",
+"I am exactly where I am meant to be.",
+"I trust the unfolding, even the slow parts.",
+"My waiting is preparing me.",
+"My becoming cannot be rushed.",
+"The right person arrives at the right moment.",
+"The right opportunity arrives at the right moment.",
+"The right healing arrives at the right moment.",
+"I am not behind; I am beautifully on my own path.",
+"I trust the pace of grace.",
+"My patience is being rewarded.",
+"What is delayed is being deepened.",
+"The universe knows things I do not yet know.",
+"I am being prepared for what I am praying for.",
+"I am being protected from what is not for me.",
+"Divine timing is on my side.",
+"I trust the timing even when I cannot feel it.",
+"I am exactly on time for my own life.",
+"Nothing real is missing me.",
+"The waiting is part of the gift.",
+"My timing is being held by something wiser than me.",
+"My life is unfolding at a sacred pace.",
+"I bless the timing of every yes and every not yet.",
+"I am exactly where I need to be, doing exactly what I need to do.",
+"I trust the slow miracles.",
+"I trust the sudden ones too.",
+"All things are arriving in perfect, beautiful, divine timing."
+],
+"flow": [
+"I am in the flow of my own life.",
+"I move with ease, grace, and inspired action.",
+"What is mine flows to me effortlessly.",
+"I do not have to push; I can be guided.",
+"I move at the pace of grace.",
+"I let life work with me.",
+"I follow the open doors.",
+"I trust what feels light and true.",
+"I release struggle; I welcome flow.",
+"My day flows beautifully when I am in alignment with myself.",
+"I am led by inspiration, not pressure.",
+"I am supported in every step I take in flow.",
+"I trust the quiet nudges of my intuition.",
+"My life is unfolding with elegant ease.",
+"I am in the right place at the right time.",
+"I let things come to me as easily as I go to them.",
+"I do less, and I receive more.",
+"I am a peaceful, powerful current.",
+"I align with what is, and what is aligns with me.",
+"I let life lead, and I dance along.",
+"My energy is flowing freely and joyfully.",
+"I move from inspiration, not desperation.",
+"I let things flow; I do not have to force.",
+"My next step will reveal itself in perfect time.",
+"I am supported by a current of grace.",
+"I am one with the rhythm of life.",
+"I trust the easy yes; I trust the gentle no.",
+"My life is becoming smoother, lighter, freer.",
+"I welcome flow, ease, and effortless unfolding.",
+"I am in the flow, and the flow is in me."
+],
+"gratitude": [
+"I am so grateful for this moment, for this breath, for this life.",
+"My heart overflows with gratitude.",
+"Thank you, thank you, thank you.",
+"I notice the goodness around me, and the goodness multiplies.",
+"I am grateful for what is, and grateful for what is becoming.",
+"My gratitude is a magnet for more goodness.",
+"I see beauty everywhere I am willing to look.",
+"I am grateful for my body, my breath, my heart, my mind.",
+"I am grateful for the people who love me.",
+"I am grateful for the people I have loved.",
+"I am grateful for everything that taught me, even the painful parts.",
+"My life is full of small miracles, and I see them now.",
+"I bless the day before me and the day behind me.",
+"Gratitude lifts me into a higher, lighter state.",
+"I am grateful for the home I live in.",
+"I am grateful for the food on my table.",
+"I am grateful for the work I do and the rest I receive.",
+"I am grateful for the chance to begin again, every morning.",
+"I bless this body that carries me through life.",
+"I bless this mind that is learning, growing, evolving.",
+"I bless this heart that loves so deeply.",
+"I am grateful for everything that is going right.",
+"I am grateful for everything that is healing.",
+"I am grateful for everything that is on its way.",
+"I let gratitude fill the spaces that worry used to occupy.",
+"My life is rich with reasons to give thanks.",
+"Thank you for this day, this body, this breath.",
+"Thank you for the love I have received.",
+"Thank you for the love I am still becoming able to receive.",
+"Gratitude is the music of my life."
+],
+"morning": [
+"Today is a gift, and I receive it with open hands.",
+"I greet this morning with love and intention.",
+"I welcome whatever this day brings, knowing I am held.",
+"My day flows beautifully from this peaceful, grounded beginning.",
+"I am open to the goodness this day will bring.",
+"I rise into this day with gratitude.",
+"My morning sets the tone for an aligned, joyful day.",
+"I move slowly enough to enjoy this morning.",
+"My energy is fresh, my mind is clear, my heart is open.",
+"Today, I show up for my own life.",
+"I welcome the inspiration that meets me today.",
+"My day is full of light, ease, and unexpected blessings.",
+"I am ready for everything beautiful this day will offer.",
+"My breath is steady, my mind is clear, my body is awake.",
+"I bless this morning, and I bless the hours ahead.",
+"Today is a yes from the universe to me.",
+"I am supported in everything I will do today.",
+"My intentions are clear, and my path is open.",
+"I move through today with grace, presence, and courage.",
+"I am the kind of person good things keep happening to.",
+"This morning is a fresh start, and I welcome it.",
+"I am here for this day, fully and joyfully.",
+"My morning is a sacred ritual of becoming.",
+"I drink this morning in like sunlight.",
+"I am alive, I am awake, I am alight.",
+"I welcome inspiration with my first breath.",
+"My day begins with kindness — first to myself, then to everyone I meet.",
+"I am ready, I am willing, I am open.",
+"Good morning, beautiful life.",
+"Today, I will love, learn, and lean toward joy."
+],
+"evening": [
+"I lay this day down with gratitude and grace.",
+"I bless the day behind me and welcome the rest ahead.",
+"I release everything I do not need to carry into the night.",
+"My evening is a soft landing into peace.",
+"I let go of unfinished things; they will keep until tomorrow.",
+"I am proud of how I showed up today.",
+"I forgive myself for any way I fell short today.",
+"I am at peace with the day, exactly as it was.",
+"My body is allowed to soften now.",
+"My breath grows slow and full.",
+"I welcome rest as a sacred gift.",
+"I let the day go.",
+"I let the day go.",
+"I let the day go.",
+"I am safe, I am held, I am free to rest.",
+"My evening is a quiet sanctuary.",
+"I welcome stillness; I welcome silence; I welcome calm.",
+"I am loved in this quiet hour.",
+"I am gentle with myself tonight.",
+"I let my mind rest from thinking.",
+"I let my heart rest from holding.",
+"I let my body rest from doing.",
+"I bless every person and place I encountered today.",
+"I bless the pillow beneath me and the breath within me.",
+"I am exactly where I need to be in this moment.",
+"I trust the night to do its quiet healing.",
+"I am wrapped in love as I prepare for sleep.",
+"My evening is mine to enjoy slowly.",
+"Thank you for this day; thank you for this rest.",
+"I am at peace; I am at peace; I am at peace."
+]
+};
+
+/* ---------------- LOGIC ---------------- */
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+const FAV_KEY = 'lumina_favs_v1';
+let favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
+const saveFavs = () => localStorage.setItem(FAV_KEY, JSON.stringify([...favs]));
+
+let activeTab = 'all';
+let currentCat = null;
+let currentList = [];
+
+/* Build flat list of all affirmations with cat ref */
+function allAffirmations(){
+  const out = [];
+  for (const theme of THEMES){
+    for (const c of theme.cats){
+      const items = A[c.id] || [];
+      items.forEach((text, i) => out.push({ text, catId:c.id, catName:c.name, key:`${c.id}::${i}` }));
+    }
+  }
+  return out;
 }
 
-function open(name) {
-  cur = name; last = -1;
-  document.getElementById('cats').classList.add('hidden');
-  const v = document.getElementById('affView');
-  v.classList.remove('active');
-  void v.offsetWidth;
-  v.classList.add('active');
-  document.getElementById('viewEmoji').textContent = data[name].e;
-  document.getElementById('viewName').textContent = name;
-  document.getElementById('affText').innerHTML = '<span class="aff-placeholder">Tap below to receive your affirmation</span>';
-  document.getElementById('affText').classList.add('show');
-  document.getElementById('shareBtn').classList.remove('show');
-  document.getElementById('inspBtn').textContent = 'Inspire Me';
-  window.scrollTo(0, 0);
+function findCat(id){
+  for (const t of THEMES){
+    const c = t.cats.find(x => x.id === id);
+    if (c) return c;
+  }
+  return null;
 }
 
-function goBack() {
-  document.getElementById('affView').classList.remove('active');
-  document.getElementById('cats').classList.remove('hidden');
-  cur = null;
-}
-
-function inspire() {
-  if (!cur) return;
-  const items = data[cur].a;
-  let i;
-  do { i = Math.floor(Math.random() * items.length); } while (i === last && items.length > 1);
-  last = i;
-
-  const el = document.getElementById('affText');
-  el.classList.remove('show');
-
-  setTimeout(() => {
-    el.textContent = items[i];
-    el.classList.add('show');
-    document.getElementById('shareBtn').classList.add('show');
-    document.getElementById('inspBtn').textContent = 'Inspire Me Again';
-  }, 250);
-}
-
-function share() {
-  const t = document.getElementById('affText').textContent;
-  if (navigator.share) {
-    navigator.share({ text: t });
-  } else {
-    navigator.clipboard.writeText(t).then(() => {
-      const b = document.getElementById('shareBtn');
-      b.textContent = 'Copied!';
-      setTimeout(() => b.textContent = 'Share', 1500);
+/* ----- Render home (categories) ----- */
+function renderHome(){
+  const home = $('#home');
+  if (activeTab === 'fav'){
+    const flat = allAffirmations().filter(a => favs.has(a.key));
+    if (!flat.length){
+      home.innerHTML = '<div class="empty">No favourites yet.<br>Tap the heart on any affirmation to keep it close.</div>';
+      return;
+    }
+    let html = '<div class="theme"><div class="theme-line"></div>';
+    flat.forEach((a, i) => {
+      html += `<div class="aff" style="animation-delay:${Math.min(i*40,400)}ms">
+        <span class="num">${a.catName}</span>
+        <p class="text">${escapeHtml(a.text)}</p>
+        <div class="actions">
+          <button class="heart on" data-key="${a.key}" aria-label="Unfavourite">${ICONS.heart}</button>
+        </div>
+      </div>`;
     });
+    html += '</div>';
+    home.innerHTML = html;
+    bindHomeHearts();
+    return;
   }
+
+  let html = '';
+  for (const theme of THEMES){
+    const totalAff = theme.cats.reduce((s,c)=> s + (A[c.id]?.length || 0), 0);
+    html += `<section class="theme">
+      <div class="theme-head">
+        <h2>${escapeHtml(theme.name)}</h2>
+        <span class="count">${theme.cats.length} · ${totalAff}</span>
+      </div>
+      <div class="theme-line"></div>
+      <div class="grid">`;
+    for (const c of theme.cats){
+      const count = (A[c.id] || []).length;
+      html += `<button class="cat" data-cat="${c.id}">
+        <div class="ico">${ICONS[c.icon] || ICONS.spark}</div>
+        <div class="name">${escapeHtml(c.name)}</div>
+        <div class="num">${count} affirmations</div>
+      </button>`;
+    }
+    html += `</div></section>`;
+  }
+  home.innerHTML = html;
+  $$('.cat').forEach(b => b.addEventListener('click', () => openCat(b.dataset.cat)));
 }
 
-init();
-</script>
+function bindHomeHearts(){
+  $$('.aff .heart').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const key = btn.dataset.key;
+      if (favs.has(key)) favs.delete(key); else favs.add(key);
+      saveFavs();
+      renderHome();
+    });
+  });
+}
 
+/* ----- Open a category ----- */
+function openCat(id){
+  const c = findCat(id);
+  if (!c) return;
+  currentCat = c;
+  currentList = (A[id] || []).slice();
+  $('#view-title').firstChild.nodeValue = c.name;
+  $('#view-sub').textContent = `${currentList.length} affirmations`;
+  renderList();
+  const view = $('#view');
+  view.classList.add('open');
+  view.setAttribute('aria-hidden','false');
+  $('#scroll').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCat(){
+  $('#view').classList.remove('open');
+  $('#view').setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+}
+
+function renderList(){
+  const wrap = $('#scroll');
+  let html = '';
+  currentList.forEach((text, i) => {
+    const key = `${currentCat.id}::${(A[currentCat.id]||[]).indexOf(text)}`;
+    const isFav = favs.has(key);
+    html += `<article class="aff" style="animation-delay:${Math.min(i*30, 600)}ms">
+      <span class="num">${i+1}</span>
+      <p class="text">${escapeHtml(text)}</p>
+      <div class="actions">
+        <button class="heart ${isFav?'on':''}" data-key="${key}" aria-label="Favourite">${ICONS.heart}</button>
+      </div>
+    </article>`;
+  });
+  html += `<div class="end-mark">end of light</div>`;
+  wrap.innerHTML = html;
+  $$('#scroll .heart').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const k = btn.dataset.key;
+      if (favs.has(k)) { favs.delete(k); btn.classList.remove('on'); }
+      else { favs.add(k); btn.classList.add('on'); }
+      saveFavs();
+    });
+  });
+}
+
+function shuffleList(){
+  for (let i = currentList.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [currentList[i], currentList[j]] = [currentList[j], currentList[i]];
+  }
+  renderList();
+  $('#scroll').scrollTop = 0;
+}
+
+/* ----- Daily affirmation ----- */
+function pickDaily(forceNew = false){
+  const all = allAffirmations();
+  let idx;
+  if (forceNew){
+    idx = Math.floor(Math.random() * all.length);
+  } else {
+    const today = new Date();
+    const seed = today.getFullYear()*10000 + (today.getMonth()+1)*100 + today.getDate();
+    idx = seed % all.length;
+  }
+  const pick = all[idx];
+  $('#daily-quote').textContent = pick.text;
+  $('#daily-cat').textContent = pick.catName;
+  // store today's so refresh stays consistent unless user taps new
+  $('#daily-card').dataset.key = pick.key;
+}
+
+/* ----- Helpers ----- */
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ----- Init ----- */
+document.addEventListener('DOMContentLoaded', () => {
+  renderHome();
+  pickDaily();
+
+  $('#new-daily').addEventListener('click', () => pickDaily(true));
+  $('#back').addEventListener('click', closeCat);
+  $('#shuffle').addEventListener('click', shuffleList);
+
+  $$('.quick-bar button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('.quick-bar button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeTab = btn.dataset.tab;
+      renderHome();
+    });
+  });
+
+  // Tap daily to open the source category
+  $('#daily-card').addEventListener('click', e => {
+    if (e.target.closest('button')) return;
+    const key = $('#daily-card').dataset.key;
+    if (key){ openCat(key.split('::')[0]); }
+  });
+
+  // ESC to close view
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeCat();
+  });
+});
+</script>
 </body>
 </html>
