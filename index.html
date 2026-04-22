@@ -150,59 +150,83 @@
   }
   .brand .divider svg{ width:10px; height:10px; }
 
-  /* ---------- DAILY CARD ---------- */
-  .daily{
+  /* ---------- INSPIRE HERO CARD ---------- */
+  .inspire-hero{
     position:relative;
-    margin: 8px 0 36px;
-    padding: 30px 26px 28px;
+    margin: 8px 0 40px;
+    padding: 36px 26px 30px;
     border-radius: var(--radius-lg);
     background:
-      linear-gradient(150deg, rgba(232,194,117,0.10), rgba(141,124,240,0.06) 60%, rgba(244,168,184,0.06));
+      linear-gradient(150deg, rgba(232,194,117,0.12), rgba(141,124,240,0.08) 60%, rgba(244,168,184,0.08));
     border:1px solid var(--line);
     overflow:hidden;
     isolation:isolate;
+    text-align:center;
   }
-  .daily::before{
+  .inspire-hero::before{
     content:''; position:absolute; inset:0;
     background:
-      radial-gradient(400px 300px at 100% -10%, rgba(232,194,117,0.18), transparent 60%),
-      radial-gradient(400px 300px at -10% 110%, rgba(141,124,240,0.18), transparent 60%);
+      radial-gradient(400px 300px at 100% -10%, rgba(232,194,117,0.22), transparent 60%),
+      radial-gradient(400px 300px at -10% 110%, rgba(141,124,240,0.22), transparent 60%);
     z-index:-1;
   }
-  .daily::after{
+  .inspire-hero::after{
     content:''; position:absolute; top:0; left:24px; right:24px; height:1px;
     background:linear-gradient(90deg, transparent, var(--gold), transparent);
   }
-  .daily .label{
-    display:flex; align-items:center; gap:8px;
-    font-size:11px; letter-spacing:0.24em; text-transform:uppercase;
-    color:var(--gold); font-weight:500;
-    margin-bottom:18px;
+  .inspire-hero .label{
+    font-size:10px; letter-spacing:0.32em; text-transform:uppercase;
+    color:var(--gold-light); font-weight:500;
+    margin-bottom:22px;
   }
-  .daily .label::before{
-    content:''; width:6px; height:6px; border-radius:50%;
-    background:var(--gold); box-shadow:0 0 12px var(--gold);
-  }
-  .daily .quote{
+  .inspire-hero .quote{
     font-family:'Cormorant Garamond',serif;
     font-weight:500;
-    font-size:23px;
+    font-size:25px;
     line-height:1.45;
     color:var(--paper);
     letter-spacing:0.005em;
+    min-height:120px;
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .35s ease, transform .35s ease;
   }
-  .daily .meta{
-    margin-top:18px; display:flex; justify-content:space-between; align-items:center;
-    font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-mute);
+  .inspire-hero .quote.fade{ opacity:0; transform:translateY(6px); }
+  .inspire-hero .source{
+    margin-top:12px;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:13px;
+    color:var(--text-mute);
+    letter-spacing:0.08em;
+    transition:opacity .35s ease;
   }
-  .daily .meta button{
-    background:none; border:1px solid var(--line); color:var(--gold-light);
-    padding:8px 14px; border-radius:999px;
-    font-size:11px; letter-spacing:0.18em; text-transform:uppercase; cursor:pointer;
-    font-family:inherit;
+  .inspire-hero .source.fade{ opacity:0; }
+
+  /* Big inspire button */
+  .inspire-btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    margin-top:22px;
+    padding: 14px 30px;
+    border-radius:999px;
+    background: linear-gradient(135deg, rgba(232,194,117,0.22), rgba(141,124,240,0.16));
+    border:1px solid var(--gold);
+    color:var(--gold-light);
+    font-family:'Inter',sans-serif;
+    font-size:11px;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    cursor:pointer;
+    font-weight:500;
     transition:all .25s ease;
+    box-shadow: 0 8px 30px -10px var(--gold-glow);
   }
-  .daily .meta button:hover{ background:var(--gold-glow); border-color:var(--gold); }
+  .inspire-btn:hover{
+    background: linear-gradient(135deg, rgba(232,194,117,0.32), rgba(141,124,240,0.22));
+    box-shadow: 0 12px 40px -10px rgba(232,194,117,0.4);
+    transform:translateY(-1px);
+  }
+  .inspire-btn:active{ transform:translateY(0); }
+  .inspire-btn svg{ width:14px; height:14px; }
 
   /* ---------- THEMES ---------- */
   .theme{ margin-bottom:34px; }
@@ -335,20 +359,94 @@
     color:var(--text-mute); margin-top:3px;
   }
 
-  .scroll{
+  /* ---------- SINGLE-CARD CATEGORY VIEW ---------- */
+  .stage{
     flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    justify-content:center;
+    padding: 22px 22px calc(28px + var(--safe-bottom));
     overflow-y:auto;
-    overflow-x:hidden;
-    padding: 28px 22px calc(40px + var(--safe-bottom));
     -webkit-overflow-scrolling:touch;
-    scroll-behavior:smooth;
   }
-  .scroll::-webkit-scrollbar{ width:0; }
+  .stage::-webkit-scrollbar{ width:0; }
 
+  .single{
+    position:relative;
+    width:100%;
+    max-width:440px;
+    margin:0 auto;
+    padding: 44px 28px 36px;
+    border-radius: var(--radius-lg);
+    background:
+      linear-gradient(150deg, rgba(232,194,117,0.10), rgba(141,124,240,0.06) 60%, rgba(244,168,184,0.06));
+    border:1px solid var(--line);
+    overflow:hidden;
+    isolation:isolate;
+    text-align:center;
+    min-height:300px;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+  }
+  .single::before{
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(400px 300px at 100% -10%, rgba(232,194,117,0.18), transparent 60%),
+      radial-gradient(400px 300px at -10% 110%, rgba(141,124,240,0.18), transparent 60%);
+    z-index:-1;
+  }
+  .single::after{
+    content:''; position:absolute; top:0; left:28px; right:28px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .single .text{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:500;
+    font-size:27px;
+    line-height:1.45;
+    color:var(--paper);
+    letter-spacing:0.005em;
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .single .text.fade{ opacity:0; transform:translateY(6px); }
+  .single .pos{
+    margin-top:24px;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:12px;
+    letter-spacing:0.18em;
+    color:var(--text-mute);
+    text-transform:uppercase;
+  }
+
+  .stage-actions{
+    display:flex; gap:14px; align-items:center; justify-content:center;
+    margin-top:22px;
+    width:100%; max-width:440px; margin-left:auto; margin-right:auto;
+  }
+  .stage-actions .heart-big{
+    width:48px; height:48px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,0.04);
+    border:1px solid var(--line-soft);
+    border-radius:50%;
+    color:var(--text-mute);
+    cursor:pointer;
+    transition:all .25s ease;
+    flex-shrink:0;
+  }
+  .stage-actions .heart-big svg{ width:18px; height:18px; }
+  .stage-actions .heart-big.on{ color:var(--rose); border-color:rgba(244,168,184,0.4); background:rgba(244,168,184,0.08); }
+  .stage-actions .heart-big.on svg{ fill:var(--rose); }
+  .stage-actions .heart-big:hover{ color:var(--rose); border-color:var(--rose); transform:scale(1.05); }
+
+  .stage-actions .inspire-btn{ margin-top:0; }
+
+  /* ---------- FAVOURITES LIST (small cards) ---------- */
   .aff{
     position:relative;
     margin-bottom:14px;
-    padding: 26px 24px 24px;
+    padding: 26px 24px 22px;
     border-radius:var(--radius);
     background:rgba(255,255,255,0.035);
     border:1px solid var(--line-soft);
@@ -361,28 +459,27 @@
   .aff::before{
     content:''; position:absolute; top:0; left:24px; right:24px; height:1px;
     background:linear-gradient(90deg, transparent, var(--gold), transparent);
-    opacity:0.7;
+    opacity:0.6;
   }
   .aff .num{
     position:absolute; top:14px; right:18px;
     font-family:'Cormorant Garamond',serif;
     font-style:italic;
-    font-size:12px;
+    font-size:11px;
     color:var(--text-mute);
-    letter-spacing:0.06em;
+    letter-spacing:0.1em;
   }
   .aff .text{
     font-family:'Cormorant Garamond',serif;
     font-weight:500;
-    font-size:21px;
+    font-size:20px;
     line-height:1.5;
     color:var(--paper);
     letter-spacing:0.005em;
   }
   .aff .actions{
-    margin-top:16px;
+    margin-top:14px;
     display:flex; gap:10px; align-items:center;
-    opacity:0.7;
   }
   .aff .heart{
     background:none; border:none; cursor:pointer; color:var(--text-mute);
@@ -394,19 +491,6 @@
   .aff .heart.on{ color:var(--rose); }
   .aff .heart.on svg{ fill:var(--rose); }
   .aff .heart:hover{ color:var(--rose); transform:scale(1.1); }
-
-  .end-mark{
-    text-align:center;
-    margin: 28px 0 12px;
-    color:var(--text-mute);
-    font-family:'Cormorant Garamond',serif;
-    font-style:italic;
-    font-size:14px;
-    letter-spacing:0.1em;
-  }
-  .end-mark::before, .end-mark::after{
-    content:'•'; margin: 0 12px; color:var(--gold-deep);
-  }
 
   /* ---------- FAVORITES TAB ---------- */
   .quick-bar{
@@ -514,14 +598,15 @@
     </div>
   </header>
 
-  <!-- Daily affirmation -->
-  <section class="daily" id="daily-card">
-    <div class="label">Today's Light</div>
-    <p class="quote" id="daily-quote">Loading…</p>
-    <div class="meta">
-      <span id="daily-cat">—</span>
-      <button id="new-daily">New light</button>
-    </div>
+  <!-- Inspire hero (random from anywhere) -->
+  <section class="inspire-hero" id="hero">
+    <div class="label">Inspire Me</div>
+    <p class="quote" id="hero-quote">Loading…</p>
+    <p class="source" id="hero-source">—</p>
+    <button class="inspire-btn" id="hero-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+      Inspire me
+    </button>
   </section>
 
   <div class="quick-bar">
@@ -536,7 +621,7 @@
   </footer>
 </div>
 
-<!-- Category view -->
+<!-- Category view: one affirmation at a time -->
 <section class="view" id="view" aria-hidden="true">
   <header class="view-head">
     <button class="icon-btn" id="back" aria-label="Back">
@@ -546,11 +631,23 @@
       Category
       <span class="sub" id="view-sub">— affirmations</span>
     </div>
-    <button class="icon-btn" id="shuffle" aria-label="Shuffle">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
-    </button>
+    <span class="icon-btn" style="visibility:hidden"></span>
   </header>
-  <div class="scroll" id="scroll"></div>
+  <div class="stage">
+    <div class="single">
+      <p class="text" id="single-text">…</p>
+      <p class="pos" id="single-pos">— of —</p>
+    </div>
+    <div class="stage-actions">
+      <button class="heart-big" id="single-heart" aria-label="Favourite">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+      <button class="inspire-btn" id="single-next">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        Inspire me
+      </button>
+    </div>
+  </div>
 </section>
 
 <script>
@@ -1826,9 +1923,13 @@ const saveFavs = () => localStorage.setItem(FAV_KEY, JSON.stringify([...favs]));
 
 let activeTab = 'all';
 let currentCat = null;
-let currentList = [];
+let currentIdx = null;          // index in current category
+let heroIdx = null;             // current hero affirmation as { catId, idx }
 
-/* Build flat list of all affirmations with cat ref */
+// Track "seen" indices per category (and a special "ALL" pool for hero)
+// so each Inspire-me cycles through everything before repeating.
+const seen = { _all: new Set() };
+
 function allAffirmations(){
   const out = [];
   for (const theme of THEMES){
@@ -1848,7 +1949,20 @@ function findCat(id){
   return null;
 }
 
-/* ----- Render home (categories) ----- */
+/* Pick a fresh random index from items.length, tracked in `seenSet`. Resets when exhausted. */
+function pickFresh(seenSet, total, exclude = -1){
+  if (seenSet.size >= total) seenSet.clear();
+  let attempts = 0;
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * total);
+    attempts++;
+  } while ((seenSet.has(idx) || idx === exclude) && attempts < total * 4);
+  seenSet.add(idx);
+  return idx;
+}
+
+/* ----- Render home (categories or favourites) ----- */
 function renderHome(){
   const home = $('#home');
   if (activeTab === 'fav'){
@@ -1857,19 +1971,25 @@ function renderHome(){
       home.innerHTML = '<div class="empty">No favourites yet.<br>Tap the heart on any affirmation to keep it close.</div>';
       return;
     }
-    let html = '<div class="theme"><div class="theme-line"></div>';
+    let html = '';
     flat.forEach((a, i) => {
       html += `<div class="aff" style="animation-delay:${Math.min(i*40,400)}ms">
-        <span class="num">${a.catName}</span>
+        <span class="num">${escapeHtml(a.catName)}</span>
         <p class="text">${escapeHtml(a.text)}</p>
         <div class="actions">
           <button class="heart on" data-key="${a.key}" aria-label="Unfavourite">${ICONS.heart}</button>
         </div>
       </div>`;
     });
-    html += '</div>';
     home.innerHTML = html;
-    bindHomeHearts();
+    $$('.aff .heart').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const k = btn.dataset.key;
+        if (favs.has(k)) favs.delete(k); else favs.add(k);
+        saveFavs();
+        renderHome();
+      });
+    });
     return;
   }
 
@@ -1897,30 +2017,38 @@ function renderHome(){
   $$('.cat').forEach(b => b.addEventListener('click', () => openCat(b.dataset.cat)));
 }
 
-function bindHomeHearts(){
-  $$('.aff .heart').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const key = btn.dataset.key;
-      if (favs.has(key)) favs.delete(key); else favs.add(key);
-      saveFavs();
-      renderHome();
-    });
-  });
+/* ----- Hero "Inspire Me" (random from anywhere) ----- */
+function inspireHero(){
+  const all = allAffirmations();
+  const exclude = heroIdx == null ? -1 : heroIdx;
+  const idx = pickFresh(seen._all, all.length, exclude);
+  heroIdx = idx;
+  const pick = all[idx];
+
+  const q = $('#hero-quote'), s = $('#hero-source');
+  q.classList.add('fade'); s.classList.add('fade');
+  setTimeout(() => {
+    q.textContent = pick.text;
+    s.textContent = `— ${pick.catName} —`;
+    $('#hero').dataset.key = pick.key;
+    q.classList.remove('fade'); s.classList.remove('fade');
+  }, 280);
 }
 
-/* ----- Open a category ----- */
+/* ----- Category single-card view ----- */
 function openCat(id){
   const c = findCat(id);
   if (!c) return;
   currentCat = c;
-  currentList = (A[id] || []).slice();
+  if (!seen[id]) seen[id] = new Set();
   $('#view-title').firstChild.nodeValue = c.name;
-  $('#view-sub').textContent = `${currentList.length} affirmations`;
-  renderList();
+  $('#view-sub').textContent = `${(A[id]||[]).length} affirmations`;
+  // Show first one immediately
+  currentIdx = null;
+  inspireSingle(true);
   const view = $('#view');
   view.classList.add('open');
   view.setAttribute('aria-hidden','false');
-  $('#scroll').scrollTop = 0;
   document.body.style.overflow = 'hidden';
 }
 
@@ -1930,57 +2058,43 @@ function closeCat(){
   document.body.style.overflow = '';
 }
 
-function renderList(){
-  const wrap = $('#scroll');
-  let html = '';
-  currentList.forEach((text, i) => {
-    const key = `${currentCat.id}::${(A[currentCat.id]||[]).indexOf(text)}`;
-    const isFav = favs.has(key);
-    html += `<article class="aff" style="animation-delay:${Math.min(i*30, 600)}ms">
-      <span class="num">${i+1}</span>
-      <p class="text">${escapeHtml(text)}</p>
-      <div class="actions">
-        <button class="heart ${isFav?'on':''}" data-key="${key}" aria-label="Favourite">${ICONS.heart}</button>
-      </div>
-    </article>`;
-  });
-  html += `<div class="end-mark">end of light</div>`;
-  wrap.innerHTML = html;
-  $$('#scroll .heart').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const k = btn.dataset.key;
-      if (favs.has(k)) { favs.delete(k); btn.classList.remove('on'); }
-      else { favs.add(k); btn.classList.add('on'); }
-      saveFavs();
-    });
-  });
-}
+function inspireSingle(initial = false){
+  const items = A[currentCat.id] || [];
+  const exclude = currentIdx == null ? -1 : currentIdx;
+  const idx = pickFresh(seen[currentCat.id], items.length, exclude);
+  currentIdx = idx;
+  const text = items[idx];
+  const key = `${currentCat.id}::${idx}`;
+  const seenN = seen[currentCat.id].size;
 
-function shuffleList(){
-  for (let i = currentList.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i+1));
-    [currentList[i], currentList[j]] = [currentList[j], currentList[i]];
-  }
-  renderList();
-  $('#scroll').scrollTop = 0;
-}
+  const t = $('#single-text');
+  const p = $('#single-pos');
+  const h = $('#single-heart');
 
-/* ----- Daily affirmation ----- */
-function pickDaily(forceNew = false){
-  const all = allAffirmations();
-  let idx;
-  if (forceNew){
-    idx = Math.floor(Math.random() * all.length);
+  if (initial){
+    t.classList.remove('fade');
+    t.textContent = text;
+    p.textContent = `${seenN} of ${items.length}`;
+    h.classList.toggle('on', favs.has(key));
+    h.dataset.key = key;
   } else {
-    const today = new Date();
-    const seed = today.getFullYear()*10000 + (today.getMonth()+1)*100 + today.getDate();
-    idx = seed % all.length;
+    t.classList.add('fade');
+    setTimeout(() => {
+      t.textContent = text;
+      p.textContent = `${seenN} of ${items.length}`;
+      h.classList.toggle('on', favs.has(key));
+      h.dataset.key = key;
+      t.classList.remove('fade');
+    }, 280);
   }
-  const pick = all[idx];
-  $('#daily-quote').textContent = pick.text;
-  $('#daily-cat').textContent = pick.catName;
-  // store today's so refresh stays consistent unless user taps new
-  $('#daily-card').dataset.key = pick.key;
+}
+
+function toggleSingleFav(){
+  const key = $('#single-heart').dataset.key;
+  if (!key) return;
+  if (favs.has(key)) { favs.delete(key); $('#single-heart').classList.remove('on'); }
+  else { favs.add(key); $('#single-heart').classList.add('on'); }
+  saveFavs();
 }
 
 /* ----- Helpers ----- */
@@ -1991,11 +2105,12 @@ function escapeHtml(s){
 /* ----- Init ----- */
 document.addEventListener('DOMContentLoaded', () => {
   renderHome();
-  pickDaily();
+  inspireHero();
 
-  $('#new-daily').addEventListener('click', () => pickDaily(true));
+  $('#hero-btn').addEventListener('click', inspireHero);
   $('#back').addEventListener('click', closeCat);
-  $('#shuffle').addEventListener('click', shuffleList);
+  $('#single-next').addEventListener('click', () => inspireSingle(false));
+  $('#single-heart').addEventListener('click', toggleSingleFav);
 
   $$('.quick-bar button').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -2006,14 +2121,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Tap daily to open the source category
-  $('#daily-card').addEventListener('click', e => {
+  // Tap hero card body to jump into the source category
+  $('#hero').addEventListener('click', e => {
     if (e.target.closest('button')) return;
-    const key = $('#daily-card').dataset.key;
+    const key = $('#hero').dataset.key;
     if (key){ openCat(key.split('::')[0]); }
   });
 
-  // ESC to close view
+  // ESC closes category view
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeCat();
   });
