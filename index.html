@@ -537,6 +537,34 @@
     border-top:1px solid var(--line-soft);
   }
 
+  /* ---------- TOP TOOLS (voice + music toggles) ---------- */
+  .top-tools{
+    position:fixed;
+    top: calc(14px + var(--safe-top));
+    right: 16px;
+    z-index:60;
+    display:flex; gap:8px;
+  }
+  .tool-btn{
+    width:40px; height:40px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(20,26,69,0.65);
+    backdrop-filter: blur(12px);
+    border:1px solid var(--line-soft);
+    border-radius:50%;
+    color:var(--text-mute);
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .tool-btn svg{ width:16px; height:16px; }
+  .tool-btn:hover{ color:var(--gold-light); border-color:var(--line); }
+  .tool-btn.on{
+    color:var(--gold-light);
+    border-color:var(--gold);
+    background:linear-gradient(135deg, rgba(232,194,117,0.18), rgba(141,124,240,0.10));
+    box-shadow: 0 0 20px -4px var(--gold-glow);
+  }
+
   /* responsive */
   @media (min-width: 520px){
     .grid{ grid-template-columns:repeat(3, 1fr); }
@@ -551,6 +579,25 @@
   <div class="orb azure"></div>
 </div>
 <div class="stars"></div>
+
+<!-- Persistent voice + music toggles -->
+<div class="top-tools">
+  <button class="tool-btn" id="voice-btn" aria-label="Voice on/off" title="Voice">
+    <!-- speaker icon (off state shows muted) -->
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" id="voice-icon">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" id="voice-wave-1"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" id="voice-wave-2"/>
+    </svg>
+  </button>
+  <button class="tool-btn" id="music-btn" aria-label="Music on/off" title="Music">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </svg>
+  </button>
+</div>
 
 <div class="app">
 
@@ -1918,17 +1965,112 @@ const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
 const FAV_KEY = 'lumina_favs_v1';
+const SET_KEY = 'lumina_settings_v1';
+
 let favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || '[]'));
 const saveFavs = () => localStorage.setItem(FAV_KEY, JSON.stringify([...favs]));
+
+let settings = { voice: true, music: false };
+try { Object.assign(settings, JSON.parse(localStorage.getItem(SET_KEY) || '{}')); } catch(e){}
+const saveSettings = () => localStorage.setItem(SET_KEY, JSON.stringify(settings));
 
 let activeTab = 'all';
 let currentCat = null;
 let currentIdx = null;          // index in current category
-let heroIdx = null;             // current hero affirmation as { catId, idx }
+let heroIdx = null;             // current hero affirmation index (in flat list)
+let currentClip = null;         // {catId, idx} of the affirmation in focus
 
 // Track "seen" indices per category (and a special "ALL" pool for hero)
 // so each Inspire-me cycles through everything before repeating.
 const seen = { _all: new Set() };
+
+/* ---------------- AUDIO ---------------- */
+let voiceAudio = null;
+function playClip(catId, idx){
+  if (voiceAudio){ try { voiceAudio.pause(); } catch(e){} voiceAudio = null; }
+  if (!settings.voice) return;
+  const a = new Audio(`audio/${catId}/${idx}.mp3`);
+  a.volume = 0.95;
+  voiceAudio = a;
+  a.play().catch(() => {/* autoplay block — silent */});
+}
+function stopVoice(){
+  if (voiceAudio){ try { voiceAudio.pause(); } catch(e){} voiceAudio = null; }
+}
+
+/* Soft Web Audio ambient pad — three detuned sine drones with a slow LFO. */
+const Pad = {
+  ctx:null, master:null, oscs:[], lfos:[], playing:false,
+  start(){
+    if (this.playing) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    if (!this.ctx) this.ctx = new AC();
+    if (this.ctx.state === 'suspended') this.ctx.resume().catch(()=>{});
+    this.playing = true;
+    const t = this.ctx.currentTime;
+    const master = this.ctx.createGain();
+    master.gain.value = 0;
+    master.gain.linearRampToValueAtTime(0.06, t + 4);
+    // Add a gentle low-pass for warmth
+    const lp = this.ctx.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 800;
+    master.connect(lp); lp.connect(this.ctx.destination);
+    this.master = master;
+
+    // Calm pad: F2, C3, F3, A3 — soft major pentatonic feel
+    const freqs = [87.31, 130.81, 174.61, 220.00];
+    const gains = [0.55, 0.40, 0.32, 0.22];
+    freqs.forEach((f, i) => {
+      const o = this.ctx.createOscillator();
+      o.type = 'sine'; o.frequency.value = f;
+      const g = this.ctx.createGain();
+      g.gain.value = gains[i];
+      // detune oscillator for chorus-like shimmer
+      const o2 = this.ctx.createOscillator();
+      o2.type = 'sine'; o2.frequency.value = f * 1.003;
+      const g2 = this.ctx.createGain(); g2.gain.value = gains[i] * 0.6;
+      // slow LFO modulating both gains
+      const lfo = this.ctx.createOscillator();
+      lfo.frequency.value = 0.04 + i * 0.013;
+      const lfoG = this.ctx.createGain(); lfoG.gain.value = gains[i] * 0.25;
+      lfo.connect(lfoG); lfoG.connect(g.gain); lfoG.connect(g2.gain);
+      o.connect(g); g.connect(master);
+      o2.connect(g2); g2.connect(master);
+      o.start(); o2.start(); lfo.start();
+      this.oscs.push(o, o2); this.lfos.push(lfo);
+    });
+  },
+  stop(){
+    if (!this.playing || !this.ctx) return;
+    const t = this.ctx.currentTime;
+    try {
+      this.master.gain.cancelScheduledValues(t);
+      this.master.gain.setValueAtTime(this.master.gain.value, t);
+      this.master.gain.linearRampToValueAtTime(0, t + 1.5);
+    } catch(e){}
+    setTimeout(() => {
+      this.oscs.forEach(o => { try { o.stop(); } catch(e){} });
+      this.lfos.forEach(o => { try { o.stop(); } catch(e){} });
+      this.oscs = []; this.lfos = [];
+      this.playing = false;
+    }, 1700);
+  }
+};
+
+function setCurrentClip(catId, idx, autoPlay = true){
+  currentClip = { catId, idx };
+  if (autoPlay) playClip(catId, idx);
+}
+
+function refreshToolUI(){
+  $('#voice-btn').classList.toggle('on', settings.voice);
+  $('#music-btn').classList.toggle('on', settings.music);
+  // dim the speaker waves when off
+  const wave1 = $('#voice-wave-1'), wave2 = $('#voice-wave-2');
+  if (wave1) wave1.style.opacity = settings.voice ? '1' : '0.3';
+  if (wave2) wave2.style.opacity = settings.voice ? '1' : '0.15';
+}
 
 function allAffirmations(){
   const out = [];
@@ -2018,12 +2160,13 @@ function renderHome(){
 }
 
 /* ----- Hero "Inspire Me" (random from anywhere) ----- */
-function inspireHero(){
+function inspireHero(initial = false){
   const all = allAffirmations();
   const exclude = heroIdx == null ? -1 : heroIdx;
   const idx = pickFresh(seen._all, all.length, exclude);
   heroIdx = idx;
   const pick = all[idx];
+  const innerIdx = parseInt(pick.key.split('::')[1], 10);
 
   const q = $('#hero-quote'), s = $('#hero-source');
   q.classList.add('fade'); s.classList.add('fade');
@@ -2032,7 +2175,9 @@ function inspireHero(){
     s.textContent = `— ${pick.catName} —`;
     $('#hero').dataset.key = pick.key;
     q.classList.remove('fade'); s.classList.remove('fade');
-  }, 280);
+    // On initial render, set clip but don't auto-play (browser blocks pre-interaction).
+    setCurrentClip(pick.catId, innerIdx, !initial);
+  }, initial ? 0 : 280);
 }
 
 /* ----- Category single-card view ----- */
@@ -2056,6 +2201,7 @@ function closeCat(){
   $('#view').classList.remove('open');
   $('#view').setAttribute('aria-hidden','true');
   document.body.style.overflow = '';
+  stopVoice();
 }
 
 function inspireSingle(initial = false){
@@ -2071,19 +2217,21 @@ function inspireSingle(initial = false){
   const p = $('#single-pos');
   const h = $('#single-heart');
 
-  if (initial){
-    t.classList.remove('fade');
+  const apply = () => {
     t.textContent = text;
     p.textContent = `${seenN} of ${items.length}`;
     h.classList.toggle('on', favs.has(key));
     h.dataset.key = key;
+    setCurrentClip(currentCat.id, idx, true);
+  };
+
+  if (initial){
+    t.classList.remove('fade');
+    apply();
   } else {
     t.classList.add('fade');
     setTimeout(() => {
-      t.textContent = text;
-      p.textContent = `${seenN} of ${items.length}`;
-      h.classList.toggle('on', favs.has(key));
-      h.dataset.key = key;
+      apply();
       t.classList.remove('fade');
     }, 280);
   }
@@ -2105,12 +2253,38 @@ function escapeHtml(s){
 /* ----- Init ----- */
 document.addEventListener('DOMContentLoaded', () => {
   renderHome();
-  inspireHero();
+  inspireHero(true); // initial render: don't try to autoplay
 
-  $('#hero-btn').addEventListener('click', inspireHero);
+  $('#hero-btn').addEventListener('click', () => inspireHero(false));
   $('#back').addEventListener('click', closeCat);
   $('#single-next').addEventListener('click', () => inspireSingle(false));
   $('#single-heart').addEventListener('click', toggleSingleFav);
+
+  // Voice toggle
+  refreshToolUI();
+  $('#voice-btn').addEventListener('click', () => {
+    settings.voice = !settings.voice;
+    saveSettings();
+    refreshToolUI();
+    if (settings.voice && currentClip){
+      // Toggling on: speak the current affirmation right away
+      playClip(currentClip.catId, currentClip.idx);
+    } else if (!settings.voice){
+      stopVoice();
+    }
+  });
+
+  // Music toggle
+  $('#music-btn').addEventListener('click', () => {
+    settings.music = !settings.music;
+    saveSettings();
+    refreshToolUI();
+    if (settings.music) Pad.start(); else Pad.stop();
+  });
+  if (settings.music){
+    // Browser may block until first interaction; start anyway, will resume on click.
+    Pad.start();
+  }
 
   $$('.quick-bar button').forEach(btn => {
     btn.addEventListener('click', () => {
